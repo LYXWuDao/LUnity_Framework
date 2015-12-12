@@ -33,7 +33,6 @@ namespace LGame.LSource
         /// </summary>
         /// <param name="resName">加载的资源名字</param>
         /// <param name="bundPath">Streaming 下文件夹  如： UI</param>
-        /// <param name="type">资源的类型</param>
         /// <returns></returns>
         private static LoadSourceEntity LoadStreamingSources(string resName, string bundPath)
         {
@@ -57,7 +56,6 @@ namespace LGame.LSource
         /// </summary>
         /// <param name="resName">加载的资源名字</param>
         /// <param name="bundPath">导入 AssetBundle 路径</param>
-        /// <param name="type">资源的类型</param>
         /// <returns></returns>
         private static LoadSourceEntity LoadBuildSources(string resName, string bundPath)
         {
@@ -73,7 +71,6 @@ namespace LGame.LSource
         /// </summary>
         /// <param name="bundPath">导入 AssetBundle 路径 </param>
         /// <param name="resName"> 从 AssetBundle 中导入的资源名  </param>
-        /// <param name="type">加载资源的类型</param>
         /// <returns></returns>
         private static LoadSourceEntity LoadBinarySources(string bundPath, string resName)
         {
@@ -170,10 +167,12 @@ namespace LGame.LSource
         /// </summary>
         /// <param name="resName">资源名字</param>
         /// <param name="bundPath">资源完整路径</param>
-        /// <param name="type">加载资源的类型</param>
         /// <returns></returns>
         public static LoadSourceEntity LoadSource(string resName, string bundPath)
         {
+#if !UNITY_EDITOR && UNITY_ANDROID
+            return LoadStreamingSources(resName, bundPath);                
+#endif
             return LoadBuildSources(resName, bundPath);
         }
 

@@ -64,7 +64,7 @@ namespace LGame.LCommon
         /// <returns></returns>
         public static string UnityBuildRootPath()
         {
-            return UnityAssets() + "SourceAssets/";
+            return "E:/selfworkspace/LUnity/LUnity_Project_Data/android/";
         }
 
         /// <summary>
