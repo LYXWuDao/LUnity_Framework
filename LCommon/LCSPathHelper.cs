@@ -52,7 +52,8 @@ namespace LGame.LCommon
         /// <returns></returns>
         public static string UnityStreamingAssets()
         {
-            return Application.streamingAssetsPath + "/";
+            // return Application.streamingAssetsPath + "/";
+            return "jar:file://" + Application.dataPath + "!/assets/";
         }
 
         /// <summary>
