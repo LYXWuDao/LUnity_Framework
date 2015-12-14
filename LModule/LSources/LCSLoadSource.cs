@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using Game.LAndroid;
 using LGame.LCommon;
 using LGame.LDebug;
 using UnityEngine;
@@ -22,34 +23,19 @@ namespace LGame.LSource
         /// <summary>
         /// 获取各平台文件的字节流
         /// </summary>
-        /// 
-        ///  Android 平台代码
-        ///   static byte [] no = new byte[1];
-        ///   获取文件2进制
-        ///  static public byte[] getFileData(String fileName)
-        ///  {
-        ///     try
-        ///     {
-        ///         InputStream myInput = UnityPlayer.currentActivity.getAssets().open(fileName);
-        ///         byte[] buffer = new byte[myInput.available()];
-        ///         myInput.read(buffer);
-        ///         return buffer;
-        ///     }
-        ///     catch (Exception e)
-        ///     {
-        ///         Log.i("Unity", "in app: 文件错误或者不存在!!" + fileName);
-        ///         return no;
-        ///     }
-        ///   }
-        /// 
-        /// <param name="filePath"></param>
+        /// <param name="filePath">文件的路径</param>
         /// <returns></returns>
         private static byte[] GetLoadFileBytes(string filePath)
         {
             if (string.IsNullOrEmpty(filePath)) return null;
 #if !UNITY_EDITOR && UNITY_ANDROID
-            return null;                
+            return SLAndroidJava.GetStaticBytes("getFileBytes", filePath);
 #endif
+            if (!File.Exists(filePath))
+            {
+                LCSConsole.WriteError("导入 AssetBundle 路径不存在,bundPath = " + filePath);
+                return null;
+            }
             return File.ReadAllBytes(filePath);
         }
 
@@ -72,12 +58,6 @@ namespace LGame.LSource
             if (string.IsNullOrEmpty(bundPath))
             {
                 LCSConsole.WriteError("导入 AssetBundle 路径为空, bundPath = " + bundPath);
-                return null;
-            }
-
-            if (!File.Exists(bundPath))
-            {
-                LCSConsole.WriteError("导入 AssetBundle 路径不存在,bundPath = " + bundPath);
                 return null;
             }
 
@@ -132,8 +112,8 @@ namespace LGame.LSource
         private static LoadSourceEntity LoadStreamingSources(string resName, string bundPath)
         {
             if (string.IsNullOrEmpty(bundPath)) bundPath = resName;
-            string path = LCSPathHelper.UnityStreamingSourcePath() + bundPath;
-            return LoadBinarySources(path, resName);
+            bundPath = LCSPathHelper.UnityStreamingSourcePath() + bundPath;
+            return LoadBinarySources(bundPath, resName);
         }
 
         /// <summary>
@@ -157,46 +137,6 @@ namespace LGame.LSource
             if (string.IsNullOrEmpty(bundPath)) bundPath = resName;
             string path = LCSPathHelper.UnityBuildRootPath() + bundPath;
             return LoadBinarySources(path, resName);
-        }
-
-        /// <summary>
-        /// 同步导入资源
-        /// 
-        /// 直接加载  Resources 文件夹下资源
-        /// </summary>
-        /// <param name="resPath">
-        /// 
-        /// 资源名字
-        /// 
-        /// Resources夹下路径
-        /// 例如：Scenes/battleScene.scene
-        /// </param>
-        /// <returns>
-        /// 加载的资源
-        /// 
-        /// return null : 资源名字为空，或者资源不存在， 或者资源类型不对
-        /// 
-        /// </returns>
-        private static LoadSourceEntity LoadResources(string resPath)
-        {
-            if (string.IsNullOrEmpty(resPath))
-            {
-                LCSConsole.WriteError("导入资源名字为空,resPath = string.Empty");
-                return null;
-            }
-            UnityEngine.Object load = Resources.Load(resPath);
-            if (load == null)
-            {
-                LCSConsole.WriteError("导入资源不存在！！");
-                return null;
-            }
-            return new LoadSourceEntity
-            {
-                ResName = resPath,
-                BundlePath = resPath,
-                LoadObj = load,
-                Bundle = null
-            };
         }
 
         /// <summary>
