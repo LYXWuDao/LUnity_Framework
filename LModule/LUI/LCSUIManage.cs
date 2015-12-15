@@ -31,6 +31,11 @@ namespace LGame.LUI
         private static Transform _uiRoot;
 
         /// <summary>
+        /// ui摄像机
+        /// </summary>
+        private static UICamera _uiCamera;
+
+        /// <summary>
         ///  创建界面
         /// </summary>
         /// <param name="winPath">加载资源路径</param>
@@ -123,7 +128,13 @@ namespace LGame.LUI
         {
             get
             {
-                return GameObject.FindObjectOfType<UICamera>();
+                if (_uiCamera == null) _uiCamera = GameObject.FindObjectOfType<UICamera>();
+                return _uiCamera;
+            }
+            set
+            {
+                if (value == null) return;
+                _uiCamera = value;
             }
         }
 
@@ -136,6 +147,11 @@ namespace LGame.LUI
             {
                 if (_uiRoot == null) _uiRoot = UIMainCamera.gameObject.transform;
                 return _uiRoot;
+            }
+            set
+            {
+                if (value == null) return;
+                _uiRoot = value;
             }
         }
 
