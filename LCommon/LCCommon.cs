@@ -33,7 +33,7 @@ namespace LGame.LCommon
         /// <summary>
         /// 是否自动将日志写入文件
         /// </summary>
-        public static bool IsWriteLogToFile = true;
+        public static bool IsWriteLogToFile = false;
 
         /// <summary>
         /// 是否自动将日志写在屏幕上
