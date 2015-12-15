@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using LGame.LBase;
 using LGame.LCommon;
 using LGame.LDebug;
@@ -34,28 +35,41 @@ namespace LGame.LUI
         /// </summary>
         /// <param name="winPath">加载资源路径</param>
         /// <param name="winName">打开界面的名字</param>
-        private static LAUIBehaviour CreatePage(string winName, string winPath)
+        /// <param name="winScript">界面脚本</param>
+        private static LAUIBehaviour CreatePage(string winName, string winPath, string winScript)
         {
             if (string.IsNullOrEmpty(winName))
             {
-                LCSConsole.WriteError("打开的界面名字为空! pageName = " + winName);
+                SLDebugHelper.WriteError("打开的界面名字为空! pageName = " + winName);
                 return null;
             }
             if (string.IsNullOrEmpty(winPath))
             {
-                LCSConsole.WriteError("加载资源 AssetBundle 文件路径为空! bundlePath = " + winPath);
+                SLDebugHelper.WriteError("加载资源 AssetBundle 文件路径为空! bundlePath = " + winPath);
                 return null;
             }
-            GameObject ui = LCSManageSource.LoadSource(winName, winPath);
+            GameObject ui = LCSManageSource.LoadAssetSource(winName, winPath);
             if (ui == null)
             {
-                LCSConsole.WriteError("加载的资源不存在!");
+                SLDebugHelper.WriteError("加载的资源不存在!");
                 return null;
             }
             GameObject go = GameObject.Instantiate(ui) as GameObject;
             if (go == null) return null;
             LCSCompHelper.InitTransform(go, UIRoot);
-            return LCSCompHelper.GetComponent<LAUIBehaviour>(go);
+            LAUIBehaviour uiSprite = LCSCompHelper.GetComponent<LAUIBehaviour>(go);
+            if (uiSprite != null) return uiSprite;
+
+            if (LCSConfig.IsLuaWindow)
+            {
+                uiSprite = LCSCompHelper.AddComponet<LCLuaPage>(go);
+                // todo: 处理lua 初始化的问题
+            }
+            else
+            {
+                uiSprite = go.AddComponent(winScript) as LAUIBehaviour;
+            }
+            return uiSprite;
         }
 
         /// <summary>
@@ -63,10 +77,11 @@ namespace LGame.LUI
         /// </summary>
         /// <param name="winPath">加载资源路径</param>
         /// <param name="winName">打开界面的名字</param>
-        /// <param name="win"></param>
-        private static bool TryCreatePage(string winName, string winPath, out LAUIBehaviour win)
+        /// <param name="winScript">界面脚本</param>
+        /// <param name="win">返回的界面</param>
+        private static bool TryCreatePage(string winName, string winPath, string winScript, out LAUIBehaviour win)
         {
-            win = CreatePage(winName, winPath);
+            win = CreatePage(winName, winPath, winScript);
             return win != null;
         }
 
@@ -77,13 +92,13 @@ namespace LGame.LUI
         {
             if (string.IsNullOrEmpty(winName))
             {
-                LCSConsole.WriteError("打开的界面名字为空! winName = string.Empty");
+                SLDebugHelper.WriteError("打开的界面名字为空! winName = string.Empty");
                 return;
             }
 
             if (go == null)
             {
-                LCSConsole.WriteError("资源加载失败!");
+                SLDebugHelper.WriteError("资源加载失败!");
                 return;
             }
 
@@ -162,17 +177,18 @@ namespace LGame.LUI
         /// 相对的完整路径，例如：UI/uiLogin.data
         /// 
         /// </param>
-        public static void OpenWindow(string winName, string winPath)
+        /// <param name="winScript">界面的脚本</param>
+        public static void OpenWindow(string winName, string winPath, string winScript)
         {
             if (string.IsNullOrEmpty(winName))
             {
-                LCSConsole.WriteError("打开的界面名字为空! winName = string.Empty");
+                SLDebugHelper.WriteError("打开的界面名字为空! winName = string.Empty");
                 return;
             }
 
             if (string.IsNullOrEmpty(winPath))
             {
-                LCSConsole.WriteError("加载资源 AssetBundle 文件路径为空! bundlePath = string.Empty");
+                SLDebugHelper.WriteError("加载资源 AssetBundle 文件路径为空! bundlePath = string.Empty");
                 return;
             }
 
@@ -188,9 +204,9 @@ namespace LGame.LUI
                 topWin.OnLostFocus();
             }
 
-            if (!TryCreatePage(winName, winPath, out win))
+            if (!TryCreatePage(winName, winPath, winScript, out win))
             {
-                LCSConsole.WriteWarning("创建 ui 界面 LAUIBehaviour 失败!");
+                SLDebugHelper.WriteWarning("创建 ui 界面 LAUIBehaviour 失败!");
                 return;
             }
 
@@ -219,7 +235,7 @@ namespace LGame.LUI
         /// <summary>
         /// 关闭最上层的界面
         /// </summary>
-        public static void CloseWindow()
+        public static void CloseTopWindow()
         {
             LAUIBehaviour win = null;
             if (!TryTopWindow(out win)) return;
@@ -258,10 +274,32 @@ namespace LGame.LUI
         {
             List<LAUIBehaviour> win = FindValues<LCSUIManage>();
             if (win == null) return;
-            for (int i = 0, len = win.Count; i < len; i++)
-                win[i].Destroy();
-            Remove<LCSUIManage>();
+            for (int i = 0, len = win.Count; i < len; i++) CloseWindow(win[i]);
         }
 
+        /// <summary>
+        /// 刷新界面
+        /// </summary>
+        /// <param name="winName">
+        /// 
+        /// winName：如果为空刷新所有的界面
+        ///          不为空刷新当前的界面
+        /// 
+        /// </param>
+        public static void RefreshWindow(string winName)
+        {
+            if (string.IsNullOrEmpty(winName))
+            {
+                List<LAUIBehaviour> win = FindValues<LCSUIManage>();
+                if (win == null) return;
+                for (int i = 0, len = win.Count; i < len; i++) win[i].OnRefresh();
+            }
+            else
+            {
+                LAUIBehaviour win = null;
+                if (!TryFind<LCSUIManage>(winName, out win)) return;
+                win.OnRefresh();
+            }
+        }
     }
 }

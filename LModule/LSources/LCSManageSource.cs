@@ -63,13 +63,13 @@ namespace LGame.LSource
         {
             if (null == entity)
             {
-                LCSConsole.WriteError("资源加载回调数据为空！ entity = null");
+                SLDebugHelper.WriteError("资源加载回调数据为空！ entity = null");
                 return;
             }
 
             if (null == entity.LoadObj)
             {
-                LCSConsole.WriteError("资源回调中加载的资源为空！ entity.LoadObj = null");
+                SLDebugHelper.WriteError("资源回调中加载的资源为空！ entity.LoadObj = null");
                 return;
             }
 
@@ -108,14 +108,14 @@ namespace LGame.LSource
         /// 
         /// 资源的名字不能相同,加特殊标志区分
         /// </summary>
-        /// <param name="resName"></param>
-        /// <param name="bundPath"></param>
+        /// <param name="resName">资源的名字</param>
+        /// <param name="bundPath">资源的路径</param>
         /// <returns></returns>
         private static UnityEngine.Object SyncLoadSource(string resName, string bundPath)
         {
             LoadSourceEntity entity = null;
             if (TryFind<LCSManageSource>(resName, out entity)) return entity.LoadObj;
-            entity = LCSLoadSource.LoadSource(resName, bundPath);
+            entity = LCSLoadSource.LoadAssetBundleSource(resName, bundPath);
             if (entity == null) return null;
             Add<LCSManageSource>(resName, entity);
             return entity.LoadObj;
@@ -127,12 +127,12 @@ namespace LGame.LSource
         /// <param name="resName">资源名字，不带后缀, 资源名字唯一</param>
         /// <param name="bundPath">资源完成路径(打包后的路径)</param>
         /// <returns></returns>
-        public static GameObject LoadSource(string resName, string bundPath)
+        public static GameObject LoadAssetSource(string resName, string bundPath)
         {
             UnityEngine.Object load = SyncLoadSource(resName, bundPath);
             if (load == null)
             {
-                LCSConsole.WriteError("同步加载资源 GameObject 失败!");
+                SLDebugHelper.WriteError("同步加载资源 GameObject 失败!");
                 return null;
             }
             return load as GameObject;
@@ -142,12 +142,12 @@ namespace LGame.LSource
         /// 加载贴图
         /// </summary>
         /// <returns></returns>
-        public static Texture2D LoadTexture(string resName, string bundPath)
+        public static Texture2D LoadAssetTexture(string resName, string bundPath)
         {
             UnityEngine.Object load = SyncLoadSource(resName, bundPath);
             if (load == null)
             {
-                LCSConsole.WriteError("同步加载资源 Texture2D 失败!");
+                SLDebugHelper.WriteError("同步加载资源 Texture2D 失败!");
                 return null;
             }
             return load as Texture2D;
@@ -159,12 +159,12 @@ namespace LGame.LSource
         /// <param name="resName"></param>
         /// <param name="bundPath"></param>
         /// <returns></returns>
-        public static AudioClip LoadAudioClip(string resName, string bundPath)
+        public static AudioClip LoadAssetAudioClip(string resName, string bundPath)
         {
             UnityEngine.Object load = SyncLoadSource(resName, bundPath);
             if (load == null)
             {
-                LCSConsole.WriteError("同步加载资源 AudioClip 失败!");
+                SLDebugHelper.WriteError("同步加载资源 AudioClip 失败!");
                 return null;
             }
             return load as AudioClip;
@@ -176,12 +176,12 @@ namespace LGame.LSource
         /// <param name="resName"></param>
         /// <param name="bundPath"></param>
         /// <returns></returns>
-        public static UIAtlas LoadUIAtlas(string resName, string bundPath)
+        public static UIAtlas LoadAssetUIAtlas(string resName, string bundPath)
         {
             UnityEngine.Object load = SyncLoadSource(resName, bundPath);
             if (load == null)
             {
-                LCSConsole.WriteError("同步加载资源 UIAtlas 失败!");
+                SLDebugHelper.WriteError("同步加载资源 UIAtlas 失败!");
                 return null;
             }
             return load as UIAtlas;
@@ -193,15 +193,32 @@ namespace LGame.LSource
         /// <param name="resName"></param>
         /// <param name="bundPath"></param>
         /// <returns></returns>
-        public static AudioSource LoadAudioSource(string resName, string bundPath)
+        public static AudioSource LoadAssetAudioSource(string resName, string bundPath)
         {
             UnityEngine.Object load = SyncLoadSource(resName, bundPath);
             if (load == null)
             {
-                LCSConsole.WriteError("同步加载资源 AudioSource 失败!");
+                SLDebugHelper.WriteError("同步加载资源 AudioSource 失败!");
                 return null;
             }
             return load as AudioSource;
+        }
+
+        /// <summary>
+        /// 加载打包资源 AssetBundle 视频
+        /// </summary>
+        /// <param name="resName">资源名字</param>
+        /// <param name="bundPath">资源加载路径</param>
+        /// <returns></returns>
+        public static TextAsset LoadAssetTextAsset(string resName, string bundPath)
+        {
+            UnityEngine.Object load = SyncLoadSource(resName, bundPath);
+            if (load == null)
+            {
+                SLDebugHelper.WriteError("同步加载资源 TextAsset 失败!");
+                return null;
+            }
+            return load as TextAsset;
         }
 
         /// <summary>
@@ -260,6 +277,27 @@ namespace LGame.LSource
         }
 
         /// <summary>
+        /// 
+        /// 没有打包的数据
+        /// 
+        /// 根据资源路径直接加载文本文件
+        /// 
+        /// </summary>
+        /// <param name="resName">文件名字</param>
+        /// <param name="bundPath">文件路径</param>
+        /// <returns></returns>
+        public static string LoadTextAsset(string resName, string bundPath)
+        {
+            LoadSourceEntity entity = null;
+            if (TryFind<LCSManageSource>(resName, out entity)) return entity.TextContent;
+            entity = LCSLoadSource.LoadSourceBytes(resName, bundPath);
+            if (entity == null) return string.Empty;
+            entity.TextContent = System.Text.Encoding.UTF8.GetString(entity.SourceBytes);
+            Add<LCSManageSource>(resName, entity);
+            return entity.TextContent;
+        }
+
+        /// <summary>
         /// 移出单个资源
         /// </summary>
         /// <param name="resName">资源名字</param>
@@ -268,13 +306,13 @@ namespace LGame.LSource
         {
             if (string.IsNullOrEmpty(resName))
             {
-                LCSConsole.WriteError("移出的资源名字为空！,resName = " + resName);
+                SLDebugHelper.WriteError("移出的资源名字为空！,resName = " + resName);
                 return false;
             }
             LoadSourceEntity entity;
             if (!TryFind<LCSManageSource>(resName, out entity))
             {
-                LCSConsole.WriteError("移出的资源不存在！,resName = " + resName);
+                SLDebugHelper.WriteError("移出的资源不存在！,resName = " + resName);
                 return false;
             }
             LCSUnloadSource.UnLoadSource(entity.Bundle);

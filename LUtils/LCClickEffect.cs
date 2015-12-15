@@ -8,7 +8,7 @@ using UnityEngine;
  * 
  */
 
-namespace Game.LUtils
+namespace LGame.LUtils
 {
 
 

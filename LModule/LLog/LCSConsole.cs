@@ -6,7 +6,6 @@ namespace LGame.LDebug
 
     /***
      * 
-     * 
      *  控制台输出使用静态输出
      * 
      */

@@ -23,7 +23,7 @@ public class LCTestFramework : LABehaviour
 
         string value;
         dic.TryGetValue(string.Empty, out value);
-        Debug.Log(value);
+        SLDebugHelper.Write(value);
 
     }
 

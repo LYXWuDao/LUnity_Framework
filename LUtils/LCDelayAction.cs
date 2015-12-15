@@ -4,7 +4,7 @@ using LGame.LBehaviour;
 using LGame.LCommon;
 using UnityEngine;
 
-namespace Game.LUtils
+namespace LGame.LUtils
 {
 
     public class LCDelayAction : LABehaviour

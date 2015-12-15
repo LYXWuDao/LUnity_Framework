@@ -33,7 +33,7 @@ namespace LGame.LSource
         {
             if (bundle == null)
             {
-                LCSConsole.WriteError("卸载资源为空！");
+                SLDebugHelper.WriteError("卸载资源为空！");
                 return;
             }
             bundle.Unload(unload);

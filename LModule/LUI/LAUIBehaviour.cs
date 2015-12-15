@@ -126,6 +126,14 @@ namespace LGame.LUI
         }
 
         /// <summary>
+        /// 刷新面板
+        /// </summary>
+        public void OnRefresh()
+        {
+
+        }
+
+        /// <summary>
         ///  界面获得焦点
         /// </summary>
         public virtual void OnFocus()

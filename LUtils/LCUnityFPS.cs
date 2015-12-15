@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace Game.LUtils
+namespace LGame.LUtils
 {
 
     /*****

@@ -8,7 +8,7 @@ using System.Collections;
  */
 
 
-namespace Game.LUtils
+namespace LGame.LUtils
 {
 
     public class LCLineTweener : LCTweener

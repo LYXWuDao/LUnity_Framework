@@ -10,7 +10,7 @@ using UnityEngine;
  * 
  */
 
-namespace Game.LUtils
+namespace LGame.LUtils
 {
 
     public class LCAdaptiveScene : LABehaviour

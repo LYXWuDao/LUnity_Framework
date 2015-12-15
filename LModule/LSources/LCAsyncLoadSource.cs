@@ -56,20 +56,20 @@ namespace LGame.LSource
             if (entity == null) yield return 0;
             if (bundleRequest == null)
             {
-                LCSConsole.WriteError("异步加载 AssetBundleCreateRequest 不存在!, bundleRequest = null");
+                SLDebugHelper.WriteError("异步加载 AssetBundleCreateRequest 不存在!, bundleRequest = null");
                 yield return 0;
             }
             yield return bundleRequest;
             AssetBundle assetBundle = bundleRequest.assetBundle;
             if (assetBundle == null)
             {
-                LCSConsole.WriteError("创建资源 AssetBundle 失败!");
+                SLDebugHelper.WriteError("创建资源 AssetBundle 失败!");
                 yield return 0;
             }
             UnityEngine.Object retobj = assetBundle.Load(entity.ResName);
             if (retobj == null)
             {
-                LCSConsole.WriteError("资源 AssetBundle 中不存在 resName = " + entity.ResName);
+                SLDebugHelper.WriteError("资源 AssetBundle 中不存在 resName = " + entity.ResName);
                 yield return 0;
             }
             if (callback == null) yield return 0;
@@ -89,7 +89,7 @@ namespace LGame.LSource
             if (entity == null) yield return 0;
             if (request == null)
             {
-                LCSConsole.WriteError("异步加载 ResourceRequest 不存在!, request = null");
+                SLDebugHelper.WriteError("异步加载 ResourceRequest 不存在!, request = null");
                 yield return 0;
             }
             yield return request;
@@ -108,31 +108,31 @@ namespace LGame.LSource
         {
             if (entity == null)
             {
-                LCSConsole.WriteError("资源加载实体数据为空，不能加载！");
+                SLDebugHelper.WriteError("资源加载实体数据为空，不能加载！");
                 return;
             }
 
             if (string.IsNullOrEmpty(entity.ResName))
             {
-                LCSConsole.WriteError("导入资源名字为空, resName = string.Empty");
+                SLDebugHelper.WriteError("导入资源名字为空, resName = string.Empty");
                 return;
             }
 
             if (string.IsNullOrEmpty(entity.BundlePath))
             {
-                LCSConsole.WriteError("导入 AssetBundle 路径为空, bundPath = string.Empty");
+                SLDebugHelper.WriteError("导入 AssetBundle 路径为空, bundPath = string.Empty");
                 return;
             }
 
             if (string.IsNullOrEmpty(loadPath))
             {
-                LCSConsole.WriteError("导入 AssetBundle 真实路径为空, loadPath = string.Empty");
+                SLDebugHelper.WriteError("导入 AssetBundle 真实路径为空, loadPath = string.Empty");
                 return;
             }
 
             if (!File.Exists(loadPath))
             {
-                LCSConsole.WriteError("导入 AssetBundle 路径不存在, loadPath = " + loadPath);
+                SLDebugHelper.WriteError("导入 AssetBundle 路径不存在, loadPath = " + loadPath);
                 return;
             }
 
@@ -191,19 +191,19 @@ namespace LGame.LSource
         {
             if (entity == null)
             {
-                LCSConsole.WriteError("资源加载实体数据为空，不能加载！");
+                SLDebugHelper.WriteError("资源加载实体数据为空，不能加载！");
                 return;
             }
 
             if (string.IsNullOrEmpty(entity.ResName))
             {
-                LCSConsole.WriteError("加载资源的名字为空, resName = string.Empty");
+                SLDebugHelper.WriteError("加载资源的名字为空, resName = string.Empty");
                 return;
             }
 
             if (string.IsNullOrEmpty(entity.BundlePath))
             {
-                LCSConsole.WriteError("加载资源的路径, BundlePath = string.Empty");
+                SLDebugHelper.WriteError("加载资源的路径, BundlePath = string.Empty");
                 return;
             }
 

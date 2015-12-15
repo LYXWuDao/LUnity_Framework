@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using LGame.LBehaviour;
 using UnityEngine;
 
-namespace Game.LUtils
+namespace LGame.LUtils
 {
 
     public class LCTweener : LABehaviour

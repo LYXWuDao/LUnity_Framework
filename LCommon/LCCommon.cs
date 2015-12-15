@@ -33,17 +33,22 @@ namespace LGame.LCommon
         /// <summary>
         /// 是否自动将日志写入文件
         /// </summary>
-        public static bool IsAutoWriteToFile = true;
+        public static bool IsWriteLogToFile = true;
 
         /// <summary>
         /// 是否自动将日志写在屏幕上
         /// </summary>
-        public static bool IsAutoWriteToGui = false;
+        public static bool IsWriteLogToGui = false;
 
         /// <summary>
         /// 是否分析内存
         /// </summary>
         public static bool IsProfiler = true;
+
+        /// <summary>
+        /// 是否使用 lua
+        /// </summary>
+        public static bool IsLuaWindow = false;
 
         /// <summary>
         /// 1M  大小
@@ -156,6 +161,16 @@ namespace LGame.LCommon
         /// 加载的资源
         /// </summary>
         public UnityEngine.Object LoadObj = null;
+
+        /// <summary>
+        /// 资源的二进制数据
+        /// </summary>
+        public byte[] SourceBytes = null;
+
+        /// <summary>
+        /// 文本内容
+        /// </summary>
+        public string TextContent = string.Empty;
 
         /// <summary>
         /// 回调函数

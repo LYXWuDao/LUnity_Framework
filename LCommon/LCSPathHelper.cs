@@ -122,6 +122,18 @@ namespace LGame.LCommon
             return "com.LUnity.game.LUtils.LUnityUtils";
         }
 
+        /// <summary>
+        /// 导入资源的路径
+        /// </summary>
+        /// <returns></returns>
+        public static string UnityLoadSourcePath()
+        {
+#if !UNITY_EDITOR && UNITY_ANDROID
+            return UnityStreamingSourcePath();
+#endif
+            return UnityBuildRootPath();
+        }
+
     }
 }
 

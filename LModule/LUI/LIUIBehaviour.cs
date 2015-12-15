@@ -44,6 +44,11 @@ namespace LGame.LUI
         void OnClose();
 
         /// <summary>
+        /// 刷新面板
+        /// </summary>
+        void OnRefresh();
+
+        /// <summary>
         ///  界面获得焦点
         /// </summary>
         void OnFocus();

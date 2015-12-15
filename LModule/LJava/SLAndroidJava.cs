@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using LGame.LCommon;
 using UnityEngine;
 
-namespace Game.LAndroid
+namespace LGame.LAndroid
 {
 
     /*****

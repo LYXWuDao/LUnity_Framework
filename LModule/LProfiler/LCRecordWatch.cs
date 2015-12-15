@@ -34,7 +34,7 @@ namespace LGame.LProfiler
             RecordWatchEntity entity = CurrentWatch;
             if (entity != null && entity.IsWatch)
             {
-                LCSConsole.WriteError("已经开始观察性能......");
+                SLDebugHelper.WriteError("已经开始观察性能......");
                 return;
             }
             if (entity == null) entity = new RecordWatchEntity { WatchKey = string.IsNullOrEmpty(key) ? LCSGuid.NewUpperGuid() : key };
@@ -50,13 +50,13 @@ namespace LGame.LProfiler
             RecordWatchEntity entity = CurrentWatch;
             if (entity == null)
             {
-                LCSConsole.WriteError("观察还未开始...");
+                SLDebugHelper.WriteError("观察还未开始...");
                 return 0;
             }
             entity.EndWatch();
             double watchTime = entity.GetWatchTime();
             // 7位精度
-            LCSConsole.WriteWarning("[Watch] {0} use time : {1}s.", entity.WatchKey, watchTime.ToString("F7"));
+            SLDebugHelper.WriteWarning("[Watch] {0} use time : {1}s.", entity.WatchKey, watchTime.ToString("F7"));
             return watchTime;
         }
 
@@ -69,12 +69,12 @@ namespace LGame.LProfiler
             RecordWatchEntity entity = CurrentWatch;
             if (entity == null)
             {
-                LCSConsole.WriteError("观察还未开始...");
+                SLDebugHelper.WriteError("观察还未开始...");
                 return 0;
             }
             if (entity.IsWatch)
             {
-                LCSConsole.WriteError("观察还未结束...");
+                SLDebugHelper.WriteError("观察还未结束...");
                 return 0;
             }
             return entity.GetWatchTime();

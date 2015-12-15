@@ -30,40 +30,16 @@ namespace LGame.LDebug
             switch (type)
             {
                 case UnityEngine.LogType.Log:
-                    if (LCSConfig.IsAutoWriteToFile)
-                    {
-                        LCSLogFile.Write(logString);
-                        LCSLogFile.Write(stackTrace);
-                    }
-                    if (LCSConfig.IsAutoWriteToGui)
-                    {
-                        LCSLogGUI.Write(logString);
-                        LCSLogGUI.Write(stackTrace);
-                    }
+                    SLDebugHelper.Write(logString);
+                    SLDebugHelper.Write(stackTrace);
                     break;
                 case UnityEngine.LogType.Warning:
-                    if (LCSConfig.IsAutoWriteToFile)
-                    {
-                        LCSLogFile.WriteWarning(logString);
-                        LCSLogFile.WriteWarning(stackTrace);
-                    }
-                    if (LCSConfig.IsAutoWriteToGui)
-                    {
-                        LCSLogGUI.WriteWarning(logString);
-                        LCSLogGUI.WriteWarning(stackTrace);
-                    }
+                    SLDebugHelper.WriteWarning(logString);
+                    SLDebugHelper.WriteWarning(stackTrace);
                     break;
                 case UnityEngine.LogType.Error:
-                    if (LCSConfig.IsAutoWriteToFile)
-                    {
-                        LCSLogFile.WriteError(logString);
-                        LCSLogFile.WriteError(stackTrace);
-                    }
-                    if (LCSConfig.IsAutoWriteToGui)
-                    {
-                        LCSLogGUI.WriteError(logString);
-                        LCSLogGUI.WriteError(stackTrace);
-                    }
+                    SLDebugHelper.WriteError(logString);
+                    SLDebugHelper.WriteError(stackTrace);
                     break;
             }
         }
@@ -77,6 +53,7 @@ namespace LGame.LDebug
             // todo: 增加启动 项目开始时设置
             if (_instance != null) return _instance;
             GameObject create = LCSCompHelper.Create("_LOG Stack");
+            DontDestroyOnLoad(create);
             _instance = LCSCompHelper.FindComponet<LCLogStack>(create);
             Application.RegisterLogCallback(_instance.LogCallback);
             return _instance;
@@ -89,7 +66,7 @@ namespace LGame.LDebug
         {
             _instance = null;
             Application.RegisterLogCallback(null);
-            if (LCSConfig.IsAutoWriteToFile) LCSLogFile.Clear();
+            if (LCSConfig.IsWriteLogToFile) LCSLogFile.Clear();
         }
 
     }
