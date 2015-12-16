@@ -56,13 +56,19 @@ namespace LGame.LEvent
         /// <summary>
         /// 开始事件
         /// </summary>
-        private void StaticEvent()
+        private void StartEvent()
         {
-            if (_eventThread == null)
-            {
-                _eventThread = new Thread(ExecuteEvent);
-                _eventThread.Start();
-            }
+            if (_eventThread == null) return;
+            _eventThread = new Thread(DealEvent);
+            _eventThread.Start();
+        }
+
+        /// <summary>
+        /// 处理事件
+        /// </summary>
+        private void DealEvent()
+        {
+
         }
 
         /// <summary>
@@ -95,6 +101,7 @@ namespace LGame.LEvent
         public static void ExecuteEvent()
         {
 
+            Instance.StartEvent();
         }
 
     }

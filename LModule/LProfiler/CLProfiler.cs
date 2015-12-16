@@ -22,7 +22,7 @@ namespace LGame.LProfiler
      * 
      */
 
-    public class LCProfiler : LABehaviour
+    public class CLProfiler : LABehaviour
     {
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace LGame.LProfiler
         /// 自己创建一个节点
         /// </summary>
         /// <returns></returns>
-        public static LCProfiler BeginProfiler()
+        public static CLProfiler BeginProfiler()
         {
             GameObject create = LCSCompHelper.Create("_Profiler");
             return BeginProfiler(create);
@@ -41,9 +41,9 @@ namespace LGame.LProfiler
         /// 开始分析
         /// </summary>
         /// <returns></returns>
-        public static LCProfiler BeginProfiler(GameObject go)
+        public static CLProfiler BeginProfiler(GameObject go)
         {
-            return go == null ? null : LCSCompHelper.FindComponet<LCProfiler>(go);
+            return go == null ? null : LCSCompHelper.FindComponet<CLProfiler>(go);
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace LGame.LProfiler
      * 
      */
 
-    public abstract class LAWatch
+    public abstract class ALWatch
     {
 
         /// <summary>

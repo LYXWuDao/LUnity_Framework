@@ -3,17 +3,19 @@ using LGame.LCommon;
 using UnityEngine;
 using System.Collections;
 
-/*****
- * 
- * 
- * 自我毁坏
- * 
- */
-
 namespace LGame.LUtils
 {
 
-    public class LCSelfDestroy : LABehaviour
+
+    /*****
+     * 
+     * 
+     * 自我毁坏
+     * 
+     */
+
+
+    public class CLSelfDestroy : LABehaviour
     {
 
         /// <summary>
@@ -27,9 +29,9 @@ namespace LGame.LUtils
         /// 开启一个销毁
         /// </summary>
         /// <returns></returns>
-        public static LCSelfDestroy Begin(GameObject go, float dtyTime)
+        public static CLSelfDestroy Begin(GameObject go, float dtyTime)
         {
-            LCSelfDestroy dest = LCSCompHelper.FindComponet<LCSelfDestroy>(go);
+            CLSelfDestroy dest = LCSCompHelper.FindComponet<CLSelfDestroy>(go);
             dest.mDtyTime = dtyTime;
             return dest;
         }

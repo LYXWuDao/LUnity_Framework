@@ -12,7 +12,7 @@ namespace LGame.LProfiler
      * 
      */
 
-    public interface LIWatch
+    public interface ILWatch
     {
 
         /// <summary>

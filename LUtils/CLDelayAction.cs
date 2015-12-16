@@ -7,7 +7,14 @@ using UnityEngine;
 namespace LGame.LUtils
 {
 
-    public class LCDelayAction : LABehaviour
+    /******
+     * 
+     * 
+     * 间隔多少时间
+     * 
+     */
+
+    public class CLDelayAction : LABehaviour
     {
 
         /// <summary>
@@ -33,7 +40,7 @@ namespace LGame.LUtils
             RemoveAction();
         }
 
-        public static LCDelayAction BeginAction(GameObject go, float delayTime, Action action)
+        public static CLDelayAction BeginAction(GameObject go, float delayTime, Action action)
         {
             if (go == null && action == null) return null;
             if (go == null || delayTime <= 0)
@@ -41,7 +48,7 @@ namespace LGame.LUtils
                 action();
                 return null;
             }
-            LCDelayAction delact = LCSCompHelper.FindComponet<LCDelayAction>(go);
+            CLDelayAction delact = LCSCompHelper.FindComponet<CLDelayAction>(go);
             delact.mActionBack = action;
             delact.mActionTime = delayTime;
             return delact;

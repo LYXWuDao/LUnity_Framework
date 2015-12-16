@@ -6,16 +6,17 @@ using UnityEngine;
 namespace LGame.LProfiler
 {
 
-    /***
+
+    /****
      * 
      * 
-     * 添加性能观察, 使用C#内置
+     * 使用 untiy 运行时间分析性能
+     * 
      * 
      */
 
-    public class LCRecordWatch : LAWatch, LIWatch
+    public class CLRecordTime : ALWatch, ILWatch
     {
-
         /// <summary>
         /// 开始观察
         /// </summary>
@@ -27,8 +28,7 @@ namespace LGame.LProfiler
         /// <summary>
         /// 开始观察
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
+        /// <param name="key">指定key值</param>
         public void StartWatch(string key)
         {
             RecordWatchEntity entity = CurrentWatch;
@@ -37,14 +37,19 @@ namespace LGame.LProfiler
                 SLDebugHelper.WriteError("已经开始观察性能......");
                 return;
             }
+
             if (entity == null) entity = new RecordWatchEntity { WatchKey = string.IsNullOrEmpty(key) ? LCSGuid.NewUpperGuid() : key };
-            entity.BeginWatch();
+            entity.IsWatch = true;
+            entity.StartTime = Time.realtimeSinceStartup;
+
+            // 记录 自游戏开始的实时时间
             AddWatch(entity);
         }
 
         /// <summary>
         /// 结束观察
         /// </summary>
+        /// <returns></returns>
         public double EndWatch()
         {
             RecordWatchEntity entity = CurrentWatch;
@@ -53,15 +58,14 @@ namespace LGame.LProfiler
                 SLDebugHelper.WriteError("观察还未开始...");
                 return 0;
             }
-            entity.EndWatch();
-            double watchTime = entity.GetWatchTime();
-            // 7位精度
-            SLDebugHelper.WriteWarning("[Watch] {0} use time : {1}s.", entity.WatchKey, watchTime.ToString("F7"));
-            return watchTime;
+            entity.IsWatch = false;
+            entity.EndTime = Time.realtimeSinceStartup;
+            SLDebugHelper.Write(string.Format(" [RecordTime] {0} use {1}s.", entity.WatchKey, entity.DiffTime));
+            return entity.DiffTime;
         }
 
         /// <summary>
-        /// 得到当前的观察时间
+        /// 得到观察的时间
         /// </summary>
         /// <returns></returns>
         public double GetWatchTime()
@@ -77,11 +81,11 @@ namespace LGame.LProfiler
                 SLDebugHelper.WriteError("观察还未结束...");
                 return 0;
             }
-            return entity.GetWatchTime();
+            return entity.DiffTime;
         }
 
         /// <summary>
-        /// 清除观察
+        /// 清理观察
         /// </summary>
         public void ClearWatch()
         {
@@ -93,3 +97,4 @@ namespace LGame.LProfiler
     }
 
 }
+

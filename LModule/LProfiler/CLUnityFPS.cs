@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace LGame.LUtils
+namespace LGame.LProfiler
 {
 
     /*****
@@ -14,7 +14,7 @@ namespace LGame.LUtils
      * 
      */
 
-    public class LCUnityFPS : LABehaviour
+    public class CLUnityFPS : LABehaviour
     {
 
         /// <summary>

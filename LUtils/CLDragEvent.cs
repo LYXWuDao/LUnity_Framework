@@ -16,7 +16,7 @@ using UnityEngine;
 namespace LGame.LUtils
 {
 
-    public class LCDragEvent : LAMouseBehaviour
+    public class CLDragEvent : LAMouseBehaviour
     {
 
         /// <summary>
