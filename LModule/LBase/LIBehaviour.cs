@@ -21,6 +21,10 @@ namespace LGame.LBehaviour
 
         /// <summary>
         /// 获得焦点
+        /// 
+        /// 只在每次激活GameObject的时候执行一次
+        /// 例如：gameobject.SetActive(true);
+        /// 
         /// </summary>
         void OnEnable();
 
@@ -56,6 +60,10 @@ namespace LGame.LBehaviour
 
         /// <summary>
         /// 对象失去焦点时调用
+        /// 
+        /// 只在每次失去焦点,GameObject的时候执行一次
+        /// 例如：gameobject.SetActive(false);
+        /// 
         /// </summary>
         void OnDisable();
 

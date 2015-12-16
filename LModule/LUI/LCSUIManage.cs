@@ -245,7 +245,7 @@ namespace LGame.LUI
             LAUIBehaviour topWin = TopWindow();
             if (topWin != null) topWin.OnLostFocus();
 
-            LCSManageSource.AsyncLoadSource(winName, winPath, AsyncOpenWindowCallback);
+            LCSManageSource.AsyncLoadAssetSource(winName, winPath, AsyncOpenWindowCallback);
         }
 
         /// <summary>

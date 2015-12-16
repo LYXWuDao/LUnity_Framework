@@ -39,18 +39,18 @@ namespace LGame.LSource
         /// <param name="resName">资源名字</param>
         /// <param name="bundPath">加载路径</param>
         /// <param name="type">资源加载类型</param>
-        private static void AsyncLoadSource(LoadSourceEntity entity, string resName, string bundPath, LoadType type)
+        private static void AsyncLoadAssetSource(LoadSourceEntity entity, string resName, string bundPath, LoadType type)
         {
             LoadSourceEntity old = null;
             if (TryFind<LCSManageSource>(resName, out old))
             {
-                AsyncLoadCallback(old);
+                AsyncLoadAssetCallback(old);
                 return;
             }
             entity.ResName = resName;
             entity.BundlePath = bundPath;
             entity.Type = type;
-            LCAsyncLoadSource.Instance.LoadSource(entity, AsyncLoadCallback);
+            LCAsyncLoadSource.Instance.LoadSource(entity, AsyncLoadAssetCallback);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace LGame.LSource
         /// 增加异步加载的资源管理
         /// </summary>
         /// <param name="entity"></param>
-        private static void AsyncLoadCallback(LoadSourceEntity entity)
+        private static void AsyncLoadAssetCallback(LoadSourceEntity entity)
         {
             if (null == entity)
             {
@@ -222,58 +222,63 @@ namespace LGame.LSource
         }
 
         /// <summary>
-        /// 异步导入数据
+        /// 异步导入 assetbundle 数据
         /// </summary>
         /// <param name="resName">资源名字，不带后缀, 资源名字唯一</param>
         /// <param name="bundPath">资源完成路径(打包后的路径)</param>
-        /// <param name="type">资源加载类型</param>
         /// <param name="callback">加载完成回调</param>
         /// <returns></returns>
-        public static void AsyncLoadSource(string resName, string bundPath, Action<string, GameObject> callback)
+        public static void AsyncLoadAssetSource(string resName, string bundPath, Action<string, GameObject> callback)
         {
-            AsyncLoadSource(new LoadSourceEntity { CallGameObject = callback }, resName, bundPath, LoadType.GameObject);
+            AsyncLoadAssetSource(new LoadSourceEntity { CallGameObject = callback }, resName, bundPath, LoadType.GameObject);
         }
 
         /// <summary>
-        /// 异步加载贴图
+        /// 异步加载assetbundle贴图
         /// </summary>
+        /// <param name="resName">加载资源的名字</param>
+        /// <param name="bundPath">加载资源的地址</param>
+        /// <param name="callback">回调函数</param>
         /// <returns></returns>
-        public static void AsyncLoadTexture(string resName, string bundPath, Action<string, Texture2D> callback)
+        public static void AsyncLoadAssetTexture(string resName, string bundPath, Action<string, Texture2D> callback)
         {
-            AsyncLoadSource(new LoadSourceEntity { CallTexture = callback }, resName, bundPath, LoadType.GameObject);
+            AsyncLoadAssetSource(new LoadSourceEntity { CallTexture = callback }, resName, bundPath, LoadType.GameObject);
         }
 
         /// <summary>
-        /// 异步加载声音
+        /// 异步加载assetbundle声音
         /// </summary>
-        /// <param name="resName"></param>
-        /// <param name="bundPath"></param>
+        /// <param name="resName">加载资源的名字</param>
+        /// <param name="bundPath">加载资源的地址</param>
+        /// <param name="callback">回调函数</param>
         /// <returns></returns>
-        public static void AsyncLoadAudioClip(string resName, string bundPath, Action<string, AudioClip> callback)
+        public static void AsyncLoadAssetAudioClip(string resName, string bundPath, Action<string, AudioClip> callback)
         {
-            AsyncLoadSource(new LoadSourceEntity { CallAudioClip = callback }, resName, bundPath, LoadType.GameObject);
+            AsyncLoadAssetSource(new LoadSourceEntity { CallAudioClip = callback }, resName, bundPath, LoadType.GameObject);
         }
 
         /// <summary>
-        /// 异步加载 ngui 图集
+        /// 异步加载 ngui assetbundle 图集
         /// </summary>
-        /// <param name="resName"></param>
-        /// <param name="bundPath"></param>
+        /// <param name="resName">加载资源的名字</param>
+        /// <param name="bundPath">加载资源的地址</param>
+        /// <param name="callback">回调函数</param>
         /// <returns></returns>
-        public static void AsyncLoadUIAtlas(string resName, string bundPath, Action<string, UIAtlas> callback)
+        public static void AsyncLoadAssetUIAtlas(string resName, string bundPath, Action<string, UIAtlas> callback)
         {
-            AsyncLoadSource(new LoadSourceEntity { CallUIAtlas = callback }, resName, bundPath, LoadType.GameObject);
+            AsyncLoadAssetSource(new LoadSourceEntity { CallUIAtlas = callback }, resName, bundPath, LoadType.GameObject);
         }
 
         /// <summary>
-        /// 异步加载视频
+        /// 异步加载 assetbundle 视频
         /// </summary>
-        /// <param name="resName"></param>
-        /// <param name="bundPath"></param>
+        /// <param name="resName">加载资源的名字</param>
+        /// <param name="bundPath">加载资源的地址</param>
+        /// <param name="callback">回调函数</param>
         /// <returns></returns>
-        public static void AsyncLoadAudioSource(string resName, string bundPath, Action<string, AudioSource> callback)
+        public static void AsyncLoadAssetAudioSource(string resName, string bundPath, Action<string, AudioSource> callback)
         {
-            AsyncLoadSource(new LoadSourceEntity { CallAudioSource = callback }, resName, bundPath, LoadType.GameObject);
+            AsyncLoadAssetSource(new LoadSourceEntity { CallAudioSource = callback }, resName, bundPath, LoadType.GameObject);
         }
 
         /// <summary>
