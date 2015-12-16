@@ -119,6 +119,40 @@ namespace LGame.LCommon
         AudioSource = 6,
     }
 
+    /// <summary>
+    /// ui tween 运动的类型
+    /// </summary>
+    public enum TweenType
+    {
+
+        None = 0,
+
+        /// <summary>
+        /// 透明度
+        /// </summary>
+        Alpha = 1,
+
+        /// <summary>
+        /// 颜色
+        /// </summary>
+        Color = 2,
+
+        /// <summary>
+        /// 位置
+        /// </summary>
+        Position = 3,
+
+        /// <summary>
+        /// 旋转
+        /// </summary>
+        Rotation = 4,
+
+        /// <summary>
+        /// 大小
+        /// </summary>
+        Scale = 5
+    }
+
     #endregion
 
     #region 框架内 公用实体
