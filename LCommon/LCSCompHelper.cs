@@ -74,65 +74,6 @@ namespace LGame.LCommon
         }
 
         /// <summary>
-        /// 加载资源
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static GameObject LoadResource(string path)
-        {
-            if (string.IsNullOrEmpty(path)) return null;
-            return Resources.Load(path) as GameObject;
-        }
-
-        /// <summary>
-        /// 导入资源
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static T LoadResource<T>(string path) where T : Component
-        {
-            GameObject load = LoadResource(path);
-            if (load == null) return default(T);
-            GameObject init = GameObject.Instantiate(load) as GameObject;
-            if (init == null) return default(T);
-            return AddComponet<T>(init);
-        }
-
-        /// <summary>
-        /// 导入并且实例化
-        /// </summary>
-        /// <param name="path">资源的路径</param>
-        /// <param name="parent">资源父节点</param>
-        /// <returns></returns>
-        public static GameObject LoadAndInstance(string path, Transform parent)
-        {
-            GameObject load = LoadResource(path);
-            if (load == null) return null;
-            GameObject init = GameObject.Instantiate(load) as GameObject;
-            if (init == null) return null;
-            Transform trans = init.transform;
-            if (parent != null) trans.parent = parent;
-            trans.localPosition = Vector3.zero;
-            trans.localRotation = Quaternion.identity;
-            trans.localScale = Vector3.one;
-            return init;
-        }
-
-        /// <summary>
-        /// 导入并且实例化
-        /// </summary>
-        /// <param name="path">资源的路径</param>
-        /// <param name="parent">资源父节点</param>
-        /// <returns></returns>
-        public static T LoadAndInstance<T>(string path, Transform parent) where T : Component
-        {
-            GameObject load = LoadAndInstance(path, parent);
-            if (load == null) return default(T);
-            return AddComponet<T>(load);
-        }
-
-        /// <summary>
         /// 查找组件
         /// </summary>
         /// <typeparam name="T">组件的类型</typeparam>
@@ -224,6 +165,31 @@ namespace LGame.LCommon
             T t = GetComponent<T>(source, childPath);
             if (t != null) return t;
             return AddComponet<T>(source, childPath);
+        }
+
+        /// <summary>
+        /// 查找子节点中的GameObject
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static GameObject FindGameObject(GameObject source, string path)
+        {
+            if (source == null) return null;
+            return FindGameObject(source.transform, path);
+        }
+
+        /// <summary>
+        /// 查找子节点中的GameObject
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static GameObject FindGameObject(Transform source, string path)
+        {
+            Transform trans = FindTransform(source, path);
+            if (trans == null) return null;
+            return trans.gameObject;
         }
 
         /// <summary>

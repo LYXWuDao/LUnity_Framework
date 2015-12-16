@@ -51,6 +51,7 @@ namespace LGame.LUtils
         /// <param name="to">目标值</param>
         public static void BeginAlpha(GameObject go, float duration, float from, float to)
         {
+            if (go == null) return;
             TweenAlpha alpha = TweenAlpha.Begin(go, duration, to);
             alpha.from = from;
             alpha.to = to;
@@ -66,6 +67,7 @@ namespace LGame.LUtils
         /// <param name="to">目标值</param>
         public static void BeginPosition(GameObject go, float duration, Vector3 from, Vector3 to)
         {
+            if (go == null) return;
             TweenPosition position = TweenPosition.Begin(go, duration, to);
             position.from = from;
             position.to = to;
@@ -81,6 +83,7 @@ namespace LGame.LUtils
         /// <param name="to">目标值</param>
         public static void BeginRotation(GameObject go, float duration, Vector3 from, Vector3 to)
         {
+            if (go == null) return;
             TweenRotation rota = TweenRotation.Begin(go, duration, Quaternion.identity);
             rota.from = from;
             rota.to = to;
@@ -96,6 +99,7 @@ namespace LGame.LUtils
         /// <param name="to">目标值</param>
         public static void BeginScale(GameObject go, float duration, Vector3 from, Vector3 to)
         {
+            if (go == null) return;
             TweenScale scale = TweenScale.Begin(go, duration, to);
             scale.from = from;
             scale.to = to;
