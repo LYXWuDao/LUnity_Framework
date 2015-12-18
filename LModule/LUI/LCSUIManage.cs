@@ -41,7 +41,7 @@ namespace LGame.LUI
         /// <param name="winPath">加载资源路径</param>
         /// <param name="winName">打开界面的名字</param>
         /// <param name="winScript">界面脚本</param>
-        private static LAUIBehaviour CreatePage(string winName, string winPath, string winScript)
+        private static LAUIBehaviour CreatePage(string winName, string winPath, string winScript = "")
         {
             if (string.IsNullOrEmpty(winName))
             {
@@ -63,7 +63,7 @@ namespace LGame.LUI
             if (go == null) return null;
             LCSCompHelper.InitTransform(go, UIRoot);
             LAUIBehaviour uiSprite = LCSCompHelper.GetComponent<LAUIBehaviour>(go);
-            if (uiSprite != null) return uiSprite;
+            if (uiSprite != null || string.IsNullOrEmpty(winScript)) return uiSprite;
 
             if (LCSConfig.IsLuaWindow)
             {
@@ -80,11 +80,11 @@ namespace LGame.LUI
         /// <summary>
         ///  尝试创建创建界面
         /// </summary>
-        /// <param name="winPath">加载资源路径</param>
         /// <param name="winName">打开界面的名字</param>
-        /// <param name="winScript">界面脚本</param>
+        /// <param name="winPath">加载资源路径</param>
         /// <param name="win">返回的界面</param>
-        private static bool TryCreatePage(string winName, string winPath, string winScript, out LAUIBehaviour win)
+        /// <param name="winScript">界面脚本</param>
+        private static bool TryCreatePage(string winName, string winPath, out LAUIBehaviour win, string winScript = "")
         {
             win = CreatePage(winName, winPath, winScript);
             return win != null;
@@ -220,7 +220,7 @@ namespace LGame.LUI
                 topWin.OnLostFocus();
             }
 
-            if (!TryCreatePage(winName, winPath, winScript, out win))
+            if (!TryCreatePage(winName, winPath, out win, winScript))
             {
                 SLDebugHelper.WriteWarning("创建 ui 界面 LAUIBehaviour 失败!");
                 return;

@@ -15,6 +15,15 @@ namespace LGame.LUI
 
     interface LIUIBehaviour
     {
+        /// <summary>
+        ///  子类实现和调用
+        /// </summary>
+        void OnAwake();
+
+        /// <summary>
+        /// 子类实现和调用
+        /// </summary>
+        void OnStart();
 
         /// <summary>
         /// 打开界面

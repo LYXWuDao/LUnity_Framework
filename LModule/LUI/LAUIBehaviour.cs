@@ -35,6 +35,12 @@ namespace LGame.LUI
         private Collider[] mBoxColliders;
 
         /// <summary>
+        /// 收集界面上所有的 UIEventTrigger  事件
+        /// </summary>
+        [NonSerialized]
+        private UIEventTrigger[] mEventTrigger;
+
+        /// <summary>
         /// 界面 ui
         /// </summary>
         [NonSerialized]
@@ -68,10 +74,30 @@ namespace LGame.LUI
             }
         }
 
-        public virtual new void Awake()
+        private new void Awake()
         {
             mPanels = LCSCompHelper.GetComponents<UIPanel>(gameObject);
             mBoxColliders = LCSCompHelper.GetComponents<Collider>(gameObject);
+            mEventTrigger = LCSCompHelper.GetComponents<UIEventTrigger>(gameObject);
+
+            if (mEventTrigger != null && mEventTrigger.Length > 0)
+            {
+                for (int i = 0, len = mEventTrigger.Length; i < len; i++)
+                {
+                    UIEventTrigger trigger = mEventTrigger[i];
+                    trigger.onClick.Add(new EventDelegate(OnClick));
+                    trigger.onDoubleClick.Add(new EventDelegate(OnDoubleClick));
+                    trigger.onPress.Add(new EventDelegate(OnPress));
+                    trigger.onRelease.Add(new EventDelegate(OnRelease));
+                }
+            }
+
+            OnAwake();
+        }
+
+        private new void Start()
+        {
+            OnStart();
         }
 
         /// <summary>
@@ -79,13 +105,13 @@ namespace LGame.LUI
         /// 
         /// 打开并创建界面
         /// </summary>
-        public virtual void OnOpen() { }
+        public void OnOpen() { }
 
         /// <summary>
         /// 打开一个具有深度的窗口
         /// </summary>
         /// <param name="depth"></param>
-        public virtual void OnOpen(int depth)
+        public void OnOpen(int depth)
         {
             mWinDepth = depth;
         }
@@ -95,7 +121,7 @@ namespace LGame.LUI
         /// </summary>
         /// <param name="depth">界面深度</param>
         /// <param name="winName">界面的名字</param>
-        public virtual void OnOpen(int depth, string winName)
+        public void OnOpen(int depth, string winName)
         {
             mWinDepth = depth;
             mWinName = winName;
@@ -105,12 +131,164 @@ namespace LGame.LUI
         }
 
         /// <summary>
-        /// 清理界面数据
+        ///  界面获得焦点
         /// </summary>
-        public override void OnClear()
+        public void OnFocus()
         {
-            mPanels = null;
-            mBoxColliders = null;
+            if (mBoxColliders == null) return;
+            LCSCompHelper.CollidersEnabled(mBoxColliders);
+        }
+
+        /// <summary>
+        /// 界面失去焦点
+        /// </summary>
+        public void OnLostFocus()
+        {
+            if (mBoxColliders == null) return;
+            LCSCompHelper.CollidersEnabled(mBoxColliders, false);
+        }
+
+        /// <summary>
+        /// 单击事件
+        /// 
+        /// 之类不应该继承它，而应该继承 OnCollider
+        /// 
+        /// 而且外部不应该调用这个函数
+        /// 
+        /// </summary>
+        public void OnClick()
+        {
+            Collider click = UICamera.lastHit.collider;
+            if (click == null) return;
+            OnCollider(click.gameObject);
+        }
+
+        /// <summary>
+        /// 双击事件
+        /// 
+        /// 之类不应该继承它，而应该继承 OnDoubleCollider
+        /// 
+        /// 而且外部不应该调用这个函数
+        /// 
+        /// </summary>
+        public void OnDoubleClick()
+        {
+            Collider dclick = UICamera.lastHit.collider;
+            if (dclick == null) return;
+            OnDoubleCollider(dclick.gameObject);
+        }
+
+        /// <summary>
+        /// 按下一定时间
+        /// </summary>
+        public void OnPress()
+        {
+            Collider press = UICamera.lastHit.collider;
+            if (press == null) return;
+            OnPressCollider(press.gameObject);
+        }
+
+        /// <summary>
+        /// 鼠标按下一定时间后抬起
+        /// </summary>
+        public void OnRelease()
+        {
+            Collider release = UICamera.lastHit.collider;
+            if (release == null) return;
+            OnReleaseCollider(release.gameObject);
+        }
+
+        /// <summary>
+        /// 显示
+        /// </summary>
+        public void OnShow()
+        {
+            gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// 隐藏
+        /// </summary>
+        public void OnHide()
+        {
+            gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// 子类继承，并实现 awake
+        /// </summary>
+        public virtual void OnAwake()
+        {
+        }
+
+        /// <summary>
+        /// 子类继承，并实现 Start
+        /// </summary>
+        public virtual void OnStart()
+        {
+        }
+
+        /// <summary>
+        /// 刷新面板
+        /// </summary>
+        public virtual void OnRefresh()
+        {
+
+        }
+
+        /// <summary>
+        /// 子类继承该函数
+        ///     
+        /// 点击函数
+        /// </summary>
+        /// <param name="btn">当前点击 Collider </param>
+        public virtual void OnCollider(GameObject btn)
+        {
+
+        }
+
+        /// <summary>
+        /// 子类继承该函数
+        /// 
+        /// 双击函数
+        /// </summary>
+        /// <param name="btn">当前双击 Collider</param>
+        public virtual void OnDoubleCollider(GameObject btn)
+        {
+
+        }
+
+        /// <summary>
+        /// 子类继承该函数
+        /// 
+        /// 按下时候的操作
+        /// </summary>
+        /// <param name="btn">按下时操作的 Collider</param>
+        public virtual void OnPressCollider(GameObject btn)
+        {
+
+        }
+
+        /// <summary>
+        /// 子类继承该函数
+        /// 
+        /// 抬起鼠标或者手指的操作
+        /// </summary>
+        /// <param name="btn">抬起的 Collider </param>
+        public virtual void OnReleaseCollider(GameObject btn)
+        {
+
+        }
+
+        /// <summary>
+        /// 清理界面数据
+        /// 
+        /// 界面关闭时清理数据
+        /// 
+        /// </summary>
+        public virtual new void OnClear()
+        {
+
         }
 
         /// <summary>
@@ -120,71 +298,12 @@ namespace LGame.LUI
         /// 
         /// 如果该类被重写，需要调用base该方法
         /// </summary>
-        public virtual void OnClose()
+        public void OnClose()
         {
+            mPanels = null;
+            mBoxColliders = null;
+            mEventTrigger = null;
             LCSUIManage.CloseWindow(this);
-        }
-
-        /// <summary>
-        /// 刷新面板
-        /// </summary>
-        public void OnRefresh()
-        {
-
-        }
-
-        /// <summary>
-        ///  界面获得焦点
-        /// </summary>
-        public virtual void OnFocus()
-        {
-            if (mBoxColliders == null) return;
-            LCSCompHelper.CollidersEnabled(mBoxColliders);
-        }
-
-        /// <summary>
-        /// 界面失去焦点
-        /// </summary>
-        public virtual void OnLostFocus()
-        {
-            if (mBoxColliders == null) return;
-            LCSCompHelper.CollidersEnabled(mBoxColliders, false);
-        }
-
-        /// <summary>
-        /// 单击事件
-        /// </summary>
-        public virtual void OnClick() { }
-
-        /// <summary>
-        /// 双击事件
-        /// </summary>
-        public virtual void OnDoubleClick() { }
-
-        /// <summary>
-        /// 按下一定时间
-        /// </summary>
-        public virtual void OnPress() { }
-
-        /// <summary>
-        /// 鼠标按下一定时间后抬起
-        /// </summary>
-        public virtual void OnRelease() { }
-
-        /// <summary>
-        /// 显示
-        /// </summary>
-        public virtual void OnShow()
-        {
-            gameObject.SetActive(true);
-        }
-
-        /// <summary>
-        /// 隐藏
-        /// </summary>
-        public virtual void OnHide()
-        {
-            gameObject.SetActive(false);
         }
 
     }

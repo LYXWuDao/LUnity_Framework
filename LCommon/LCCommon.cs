@@ -120,9 +120,9 @@ namespace LGame.LCommon
     }
 
     /// <summary>
-    /// ui tween 运动的类型
+    /// ngui tween 运动的类型
     /// </summary>
-    public enum TweenType
+    public enum TweenerType
     {
 
         None = 0,
@@ -359,6 +359,24 @@ namespace LGame.LCommon
         /// 默认白色
         /// </summary>
         public Color LogColor = Color.white;
+
+    }
+
+    /// <summary>
+    /// tween 运动实体
+    /// </summary>
+    public class TweenerEntity
+    {
+
+        /// <summary>
+        /// ngui Tweener 组件
+        /// </summary>
+        public UITweener Tweener = null;
+
+        /// <summary>
+        /// 是否立即下一个
+        /// </summary>
+        public bool IsImmediately = false;
 
     }
 

@@ -10,7 +10,9 @@ namespace LGame.LUtils
     /****
      * 
      * 
-     * 执行 一串 tween 事件
+     * 执行 一串 tweener 事件
+     * 
+     * 主要对 tweener 事件辅助
      * 
      */
 
@@ -40,7 +42,7 @@ namespace LGame.LUtils
         /// <summary>
         /// 保存一个列表
         /// </summary>
-        private List<UITweener> TweenList = new List<UITweener>();
+        private List<TweenerEntity> TweenerList = new List<TweenerEntity>();
 
         /// <summary>
         /// 增加一个 透明运动
@@ -55,7 +57,31 @@ namespace LGame.LUtils
             TweenAlpha alpha = TweenAlpha.Begin(go, duration, to);
             alpha.from = from;
             alpha.to = to;
-            Instance.TweenList.Add(alpha);
+            Instance.TweenerList.Add(new TweenerEntity()
+            {
+                Tweener = alpha,
+                IsImmediately = false
+            });
+        }
+
+        /// <summary>
+        /// 增加一个 透明运动，是否立即开始下一个
+        /// </summary>
+        /// <param name="go">运动的对象</param>
+        /// <param name="duration">运动的时间</param>
+        /// <param name="from">起始值</param>
+        /// <param name="to">目标值</param>
+        public static void BeginAlphaImmediate(GameObject go, float duration, float from, float to)
+        {
+            if (go == null) return;
+            TweenAlpha alpha = TweenAlpha.Begin(go, duration, to);
+            alpha.from = from;
+            alpha.to = to;
+            Instance.TweenerList.Add(new TweenerEntity()
+            {
+                Tweener = alpha,
+                IsImmediately = true
+            });
         }
 
         /// <summary>
@@ -71,7 +97,31 @@ namespace LGame.LUtils
             TweenPosition position = TweenPosition.Begin(go, duration, to);
             position.from = from;
             position.to = to;
-            Instance.TweenList.Add(position);
+            Instance.TweenerList.Add(new TweenerEntity()
+            {
+                Tweener = position,
+                IsImmediately = false
+            });
+        }
+
+        /// <summary>
+        /// 增加一个 位置运动
+        /// </summary>
+        /// <param name="go">运动的对象</param>
+        /// <param name="duration">运动的时间</param>
+        /// <param name="from">起始值</param>
+        /// <param name="to">目标值</param>
+        public static void BeginPositionImmediate(GameObject go, float duration, Vector3 from, Vector3 to)
+        {
+            if (go == null) return;
+            TweenPosition position = TweenPosition.Begin(go, duration, to);
+            position.from = from;
+            position.to = to;
+            Instance.TweenerList.Add(new TweenerEntity()
+            {
+                Tweener = position,
+                IsImmediately = true
+            });
         }
 
         /// <summary>
@@ -87,7 +137,31 @@ namespace LGame.LUtils
             TweenRotation rota = TweenRotation.Begin(go, duration, Quaternion.identity);
             rota.from = from;
             rota.to = to;
-            Instance.TweenList.Add(rota);
+            Instance.TweenerList.Add(new TweenerEntity()
+            {
+                Tweener = rota,
+                IsImmediately = false
+            });
+        }
+
+        /// <summary>
+        /// 增加一个 旋转运动
+        /// </summary>
+        /// <param name="go">运动的对象</param>
+        /// <param name="duration">运动的时间</param>
+        /// <param name="from">起始值</param>
+        /// <param name="to">目标值</param>
+        public static void BeginRotationImmediate(GameObject go, float duration, Vector3 from, Vector3 to)
+        {
+            if (go == null) return;
+            TweenRotation rota = TweenRotation.Begin(go, duration, Quaternion.identity);
+            rota.from = from;
+            rota.to = to;
+            Instance.TweenerList.Add(new TweenerEntity()
+            {
+                Tweener = rota,
+                IsImmediately = true
+            });
         }
 
         /// <summary>
@@ -103,12 +177,40 @@ namespace LGame.LUtils
             TweenScale scale = TweenScale.Begin(go, duration, to);
             scale.from = from;
             scale.to = to;
-            Instance.TweenList.Add(scale);
+            Instance.TweenerList.Add(new TweenerEntity()
+            {
+                Tweener = scale,
+                IsImmediately = false
+            });
+        }
+
+        /// <summary>
+        /// 增加一个 大小
+        /// </summary>
+        /// <param name="go">运动的对象</param>
+        /// <param name="duration">运动的时间</param>
+        /// <param name="from">起始值</param>
+        /// <param name="to">目标值</param>
+        public static void BeginScaleImmediate(GameObject go, float duration, Vector3 from, Vector3 to)
+        {
+            if (go == null) return;
+            TweenScale scale = TweenScale.Begin(go, duration, to);
+            scale.from = from;
+            scale.to = to;
+            Instance.TweenerList.Add(new TweenerEntity()
+            {
+                Tweener = scale,
+                IsImmediately = true
+            });
         }
 
         public override void OnUpdate(float deltaTime)
         {
-            if (TweenList.Count <= 0) return;
+            if (TweenerList.Count <= 0 && mTweenTime <= 0)
+            {
+                Destroy();
+                return;
+            }
 
             if (mTweenTime > 0)
             {
@@ -116,11 +218,12 @@ namespace LGame.LUtils
                 return;
             }
 
-            UITweener tween = TweenList[0];
-
-            mTweenTime = tween.duration;
+            TweenerEntity entity = TweenerList[0];
+            if (entity == null) return;
+            UITweener tween = entity.Tweener;
+            mTweenTime = entity.IsImmediately ? 0 : tween.duration;
             tween.PlayForward();
-            TweenList.RemoveAt(0);
+            TweenerList.RemoveAt(0);
         }
     }
 
