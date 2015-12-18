@@ -16,7 +16,7 @@ namespace LGame.LMessage
      * 
      */
 
-    public static class LCSLocalPrefs
+    public static class SLLocalPrefs
     {
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace LGame.LMessage
         public static void AddJson<T>(string key, T value)
         {
             if (string.IsNullOrEmpty(key)) return;
-            AddString(key, LCJson.ToJson(value));
+            AddString(key, CLJson.ToJson(value));
         }
 
         /// <summary>
@@ -220,11 +220,11 @@ namespace LGame.LMessage
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static LCJson GetJson(string key)
+        public static CLJson GetJson(string key)
         {
             if (string.IsNullOrEmpty(key)) return null;
             string json = GetString(key);
-            return string.IsNullOrEmpty(json) ? null : new LCJson(json);
+            return string.IsNullOrEmpty(json) ? null : new CLJson(json);
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace LGame.LMessage
         {
             if (string.IsNullOrEmpty(key)) return default(T);
             string json = GetString(key);
-            return LCJson.ToObejct<T>(json);
+            return CLJson.ToObejct<T>(json);
         }
 
         /// <summary>

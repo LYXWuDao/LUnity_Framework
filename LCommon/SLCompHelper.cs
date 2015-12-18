@@ -13,7 +13,7 @@ using UnityEngine;
 namespace LGame.LCommon
 {
 
-    public static class LCSCompHelper
+    public static class SLCompHelper
     {
 
         /// <summary>

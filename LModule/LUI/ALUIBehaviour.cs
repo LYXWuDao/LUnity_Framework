@@ -19,7 +19,7 @@ namespace LGame.LUI
      * 
      */
 
-    public abstract class LAUIBehaviour : LABehaviour, LIUIBehaviour
+    public abstract class ALUIBehaviour : ALBehaviour, LIUIBehaviour
     {
 
         /// <summary>
@@ -76,9 +76,9 @@ namespace LGame.LUI
 
         private new void Awake()
         {
-            mPanels = LCSCompHelper.GetComponents<UIPanel>(gameObject);
-            mBoxColliders = LCSCompHelper.GetComponents<Collider>(gameObject);
-            mEventTrigger = LCSCompHelper.GetComponents<UIEventTrigger>(gameObject);
+            mPanels = SLCompHelper.GetComponents<UIPanel>(gameObject);
+            mBoxColliders = SLCompHelper.GetComponents<Collider>(gameObject);
+            mEventTrigger = SLCompHelper.GetComponents<UIEventTrigger>(gameObject);
 
             if (mEventTrigger != null && mEventTrigger.Length > 0)
             {
@@ -136,7 +136,7 @@ namespace LGame.LUI
         public void OnFocus()
         {
             if (mBoxColliders == null) return;
-            LCSCompHelper.CollidersEnabled(mBoxColliders);
+            SLCompHelper.CollidersEnabled(mBoxColliders);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace LGame.LUI
         public void OnLostFocus()
         {
             if (mBoxColliders == null) return;
-            LCSCompHelper.CollidersEnabled(mBoxColliders, false);
+            SLCompHelper.CollidersEnabled(mBoxColliders, false);
         }
 
         /// <summary>
@@ -303,7 +303,7 @@ namespace LGame.LUI
             mPanels = null;
             mBoxColliders = null;
             mEventTrigger = null;
-            LCSUIManage.CloseWindow(this);
+            SLUIManage.CloseWindow(this);
         }
 
     }

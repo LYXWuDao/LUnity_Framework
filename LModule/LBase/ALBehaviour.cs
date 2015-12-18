@@ -13,7 +13,7 @@ namespace LGame.LBehaviour
      * 
      */
 
-    public abstract class LABehaviour : LCBaseBehaviour, LIBehaviour
+    public abstract class ALBehaviour : CLBehaviour, ILBehaviour
     {
         public virtual void Awake()
         {
@@ -73,7 +73,6 @@ namespace LGame.LBehaviour
 
         public virtual void Destroy()
         {
-            OnClear();
             GameObject.Destroy(gameObject);
         }
 
@@ -84,7 +83,7 @@ namespace LGame.LBehaviour
 
         public virtual void OnApplicationQuit()
         {
-            OnClear();
+
         }
     }
 

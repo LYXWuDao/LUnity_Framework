@@ -1,38 +1,65 @@
-﻿using LGame.LCommon;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using LGame.LCommon;
 using UnityEngine;
 
 namespace LGame.LDebug
 {
 
-    /***
+    /*****
      * 
-     *  控制台输出使用静态输出
+     * 
+     * 将日志输出到文件中
+     * 
      * 
      */
 
-    public static class LCSConsole
+    public static class SLLogFile
     {
 
         /// <summary>
-        /// 输出 debug 日志
+        /// 文件日志列表
         /// </summary>
-        /// <param name="msg">输入内容</param>
-        /// <param name="logType">输出的类型</param>
-        private static void WriteDebug(object msg, DebugType logType)
+        private static List<string> _fileLogs = new List<string>();
+
+        /// <summary>
+        /// 写入文件
+        /// </summary>
+        /// <param name="msg"></param>
+        private static void WriteToFile(string msg)
         {
             if (!LCSConfig.IsDebugMode) return;
-            switch (logType)
+            if (string.IsNullOrEmpty(msg)) return;
+            if (_fileLogs.Count >= LCSConfig.LogFileCacheCount) SaveToFile();
+            _fileLogs.Add(msg);
+        }
+
+        /// <summary>
+        /// 将日志保存到日志文件中
+        /// </summary>
+        public static void SaveToFile()
+        {
+            if (!LCSConfig.IsDebugMode || _fileLogs == null) return;
+            string savePath = SLPathHelper.UnityLogFilePath();
+            FileStream stream = File.Open(savePath, FileMode.OpenOrCreate);
+            if (stream.Length > LCSConfig.KbSize)
             {
-                case DebugType.Log:
-                    UnityEngine.Debug.Log(msg);
-                    break;
-                case DebugType.Warning:
-                    UnityEngine.Debug.LogWarning(msg);
-                    break;
-                case DebugType.Error:
-                    UnityEngine.Debug.LogError(msg);
-                    break;
+                stream.Close();
+                File.WriteAllText(savePath, "");
             }
+            stream.Close();
+            stream = null;
+
+            StreamWriter write = File.AppendText(savePath);
+            for (int i = 0, len = _fileLogs.Count; i < len; i++)
+            {
+                write.WriteLine(_fileLogs[i]);
+            }
+            _fileLogs.Clear();
+            write.Flush();
+            write.Close();
+            write = null;
         }
 
         /// <summary>
@@ -41,7 +68,8 @@ namespace LGame.LDebug
         /// <param name="msg">输出日志</param>
         public static void Write(object msg)
         {
-            WriteDebug(msg, DebugType.Log);
+            if (!LCSConfig.IsDebugMode) return;
+            WriteToFile(string.Format("[File log]:{0}", msg));
         }
 
         /// <summary>
@@ -51,7 +79,8 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public static void Write(string msg, params object[] args)
         {
-            WriteDebug(string.Format(msg, args), DebugType.Log);
+            if (!LCSConfig.IsDebugMode) return;
+            WriteToFile(string.Format("[File log]:" + msg, args));
         }
 
         /// <summary>
@@ -67,30 +96,32 @@ namespace LGame.LDebug
                 sb.Append(args[i]);
                 sb.Append(", ");
             }
-            WriteDebug(sb.ToString(), DebugType.Log);
+            WriteToFile(string.Format("[File log]:{0}", sb));
         }
 
         /// <summary>
-        /// 输出错误
+        /// 输出错误日志
         /// </summary>
         /// <param name="msg"></param>
         public static void WriteError(object msg)
         {
-            WriteDebug(msg, DebugType.Error);
+            if (!LCSConfig.IsDebugMode) return;
+            WriteToFile(string.Format("[File Error]:{0}", msg));
         }
 
         /// <summary>
-        /// 输出错误
+        /// 输出错误日志
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="args"></param>
         public static void WriteError(string msg, params object[] args)
         {
-            WriteDebug(string.Format(msg, args), DebugType.Error);
+            if (!LCSConfig.IsDebugMode) return;
+            WriteToFile(string.Format("[File Error]:" + msg, args));
         }
 
         /// <summary>
-        /// 输出错误
+        /// 输出错误日志
         /// </summary>
         /// <param name="args"></param>
         public static void WriteError(params object[] args)
@@ -102,30 +133,32 @@ namespace LGame.LDebug
                 sb.Append(args[i]);
                 sb.Append(", ");
             }
-            WriteDebug(sb.ToString(), DebugType.Error);
+            WriteToFile(string.Format("[File Error]:{0}", sb));
         }
 
         /// <summary>
-        /// 输出警告
+        /// 输出警告日志
         /// </summary>
         /// <param name="msg"></param>
         public static void WriteWarning(object msg)
         {
-            WriteDebug(msg, DebugType.Warning);
+            if (!LCSConfig.IsDebugMode) return;
+            WriteToFile(string.Format("[File Warning]:{0}", msg));
         }
 
         /// <summary>
-        /// 输出警告
+        /// 输出警告日志
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="args"></param>
         public static void WriteWarning(string msg, params object[] args)
         {
-            WriteDebug(string.Format(msg, args), DebugType.Warning);
+            if (!LCSConfig.IsDebugMode) return;
+            WriteToFile(string.Format("[File Warning]:" + msg, args));
         }
 
         /// <summary>
-        /// 输出警告
+        /// 输出警告日志
         /// </summary>
         /// <param name="args"></param>
         public static void WriteWarning(params object[] args)
@@ -137,7 +170,16 @@ namespace LGame.LDebug
                 sb.Append(args[i]);
                 sb.Append(", ");
             }
-            WriteDebug(sb.ToString(), DebugType.Warning);
+            WriteToFile(string.Format("[File Warning]:{0}", sb));
+        }
+
+        /// <summary>
+        /// 清理数据
+        /// </summary>
+        public static void Clear()
+        {
+            SaveToFile();
+            _fileLogs.Clear();
         }
 
     }

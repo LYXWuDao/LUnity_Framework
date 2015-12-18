@@ -23,7 +23,7 @@ namespace LGame.LSource
      * 
      */
 
-    public sealed class LCAsyncLoadSource
+    public sealed class CLAsyncLoadSource
     {
 
         /// <summary>
@@ -31,12 +31,12 @@ namespace LGame.LSource
         /// 
         /// 单例模式需要
         /// </summary>
-        private LCAsyncLoadSource()
+        private CLAsyncLoadSource()
         {
 
         }
 
-        private static LCAsyncLoadSource _instance;
+        private static CLAsyncLoadSource _instance;
 
         /// <summary>
         /// 用于 lock 
@@ -139,7 +139,7 @@ namespace LGame.LSource
             byte[] bytes = File.ReadAllBytes(loadPath);
             AssetBundleCreateRequest request = AssetBundle.CreateFromMemory(bytes);
             // 开始异步加载
-            LCCoroutine.Instance.StartCoroutine(StartLoad(request, entity, callback));
+            CLCoroutine.Instance.StartCoroutine(StartLoad(request, entity, callback));
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace LGame.LSource
         {
             if (entity == null) return;
             if (string.IsNullOrEmpty(entity.BundlePath)) entity.BundlePath = entity.ResName;
-            string loadPath = LCSPathHelper.UnityBuildRootPath() + entity.BundlePath;
+            string loadPath = SLPathHelper.UnityBuildRootPath() + entity.BundlePath;
             LoadBinarySources(entity, loadPath, callback);
         }
 
@@ -170,7 +170,7 @@ namespace LGame.LSource
         {
             if (entity == null) return;
             if (string.IsNullOrEmpty(entity.BundlePath)) entity.BundlePath = entity.ResName;
-            string loadPath = LCSPathHelper.UnityStreamingAssets() + entity.BundlePath;
+            string loadPath = SLPathHelper.UnityStreamingAssets() + entity.BundlePath;
             LoadBinarySources(entity, loadPath, callback);
         }
 
@@ -208,13 +208,13 @@ namespace LGame.LSource
             }
 
             ResourceRequest request = Resources.LoadAsync(entity.BundlePath);
-            LCCoroutine.Instance.StartCoroutine(StartLoad(request, entity, callback));
+            CLCoroutine.Instance.StartCoroutine(StartLoad(request, entity, callback));
         }
 
         /// <summary>
         /// 单例模式实例话
         /// </summary>
-        public static LCAsyncLoadSource Instance
+        public static CLAsyncLoadSource Instance
         {
             get
             {
@@ -224,7 +224,7 @@ namespace LGame.LSource
                     {
                         if (_instance == null)
                         {
-                            _instance = new LCAsyncLoadSource();
+                            _instance = new CLAsyncLoadSource();
                         }
                     }
                 }

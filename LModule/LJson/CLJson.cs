@@ -12,7 +12,7 @@ namespace LGame.LJson
      * 
      */
 
-    public class LCJson
+    public class CLJson
     {
 
         private JsonData _jsonData;
@@ -136,7 +136,7 @@ namespace LGame.LJson
         /// 将根据第一次增加的数据判断是数组还是键值对
         /// 
         /// </summary>
-        public LCJson()
+        public CLJson()
         {
             _jsonData = new JsonData();
         }
@@ -148,7 +148,7 @@ namespace LGame.LJson
         /// 
         /// </summary>
         /// <param name="json">json 数据</param>
-        public LCJson(string json)
+        public CLJson(string json)
         {
             _jsonData = JsonMapper.ToObject(json);
         }
@@ -164,7 +164,7 @@ namespace LGame.LJson
         /// 基础类型包括：int, string, bool, long, double
         /// </summary>
         /// <param name="obj">一个object对象</param>
-        public LCJson(object obj)
+        public CLJson(object obj)
         {
             _jsonData = ToJsonData(obj);
         }

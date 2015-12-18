@@ -14,7 +14,7 @@ namespace LGame.LUtils
      * 
      */
 
-    public class CLDelayAction : LABehaviour
+    public class CLDelayAction : ALBehaviour
     {
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace LGame.LUtils
                 action();
                 return null;
             }
-            CLDelayAction delact = LCSCompHelper.FindComponet<CLDelayAction>(go);
+            CLDelayAction delact = SLCompHelper.FindComponet<CLDelayAction>(go);
             delact.mActionBack = action;
             delact.mActionTime = delayTime;
             return delact;

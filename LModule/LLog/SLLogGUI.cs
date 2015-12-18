@@ -12,14 +12,14 @@ namespace LGame.LDebug
      * 
      */
 
-    public static class LCSLogGUI
+    public static class SLLogGUI
     {
 
-        private static LCLogGUI _logGui = null;
+        private static CLLogGUI _logGui = null;
 
         private static object _lock = new object();
 
-        private static LCLogGUI Instance
+        private static CLLogGUI Instance
         {
             get
             {
@@ -28,7 +28,7 @@ namespace LGame.LDebug
                 {
                     if (_logGui == null)
                     {
-                        _logGui = LCLogGUI.Instance;
+                        _logGui = CLLogGUI.Instance;
                     }
                 }
                 return _logGui;

@@ -10,7 +10,7 @@ namespace LGame.LDebug
      * 
      */
 
-    public interface LIDeBug
+    public interface ILDeBug
     {
 
         /// <summary>

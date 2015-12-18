@@ -256,7 +256,7 @@ namespace LGame.LCommon
 
         public LoadSourceEntity()
         {
-            SourceId = LCSGuid.NewUpperGuid();
+            SourceId = SLGuid.NewUpperGuid();
         }
 
     }
@@ -422,7 +422,7 @@ namespace LGame.LCommon
 
         protected LATManagerEntity()
         {
-            Guid = LCSGuid.NewUpperGuid();
+            Guid = SLGuid.NewUpperGuid();
         }
 
         /// <summary>

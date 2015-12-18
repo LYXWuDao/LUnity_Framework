@@ -11,7 +11,7 @@ namespace LGame.LBehaviour
      * 
      */
 
-    public interface LIBehaviour
+    public interface ILBehaviour
     {
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace LGame.LBehaviour
         void OnDisable();
 
         /// <summary>
-        /// 清理数据
+        /// 被销毁的时候清理数据
         /// </summary>
         void OnClear();
 
@@ -80,7 +80,7 @@ namespace LGame.LBehaviour
         /// <summary>
         /// unity 自动调用
         /// 
-        /// 对象销毁时调用
+        /// 对象被销毁时调用
         /// </summary>
         void OnDestroy();
 

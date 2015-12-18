@@ -11,7 +11,7 @@
 namespace LGame.LBehaviour
 {
 
-    public abstract class LAMouseBehaviour : LABehaviour
+    public abstract class ALMouseBehaviour : ALBehaviour
     {
 
         public override void Update()

@@ -38,7 +38,7 @@ namespace LGame.LProfiler
                 return;
             }
 
-            if (entity == null) entity = new RecordWatchEntity { WatchKey = string.IsNullOrEmpty(key) ? LCSGuid.NewUpperGuid() : key };
+            if (entity == null) entity = new RecordWatchEntity { WatchKey = string.IsNullOrEmpty(key) ? SLGuid.NewUpperGuid() : key };
             entity.IsWatch = true;
             entity.StartTime = Time.realtimeSinceStartup;
 

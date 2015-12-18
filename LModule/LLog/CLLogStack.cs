@@ -12,10 +12,10 @@ namespace LGame.LDebug
      * 
      */
 
-    public class LCLogStack : LABehaviour
+    public class CLLogStack : ALBehaviour
     {
 
-        private static LCLogStack _instance = null;
+        private static CLLogStack _instance = null;
 
         /// <summary>
         /// 日志堆栈回调函数
@@ -25,7 +25,7 @@ namespace LGame.LDebug
         /// <param name="logString">输入的日志</param>
         /// <param name="stackTrace">堆栈数据</param>
         /// <param name="type">日志类型</param>
-        private void LogCallback(string logString, string stackTrace, UnityEngine.LogType type)
+        private void LogCallback(string logString, string stackTrace, LogType type)
         {
             switch (type)
             {
@@ -48,13 +48,13 @@ namespace LGame.LDebug
         /// 开始堆栈
         /// </summary>
         /// <returns></returns>
-        public static LCLogStack Begin()
+        public static CLLogStack Begin()
         {
             // todo: 增加启动 项目开始时设置
             if (_instance != null) return _instance;
-            GameObject create = LCSCompHelper.Create("_LOG Stack");
+            GameObject create = SLCompHelper.Create("_LOG Stack");
             DontDestroyOnLoad(create);
-            _instance = LCSCompHelper.FindComponet<LCLogStack>(create);
+            _instance = SLCompHelper.FindComponet<CLLogStack>(create);
             Application.RegisterLogCallback(_instance.LogCallback);
             return _instance;
         }
@@ -66,7 +66,7 @@ namespace LGame.LDebug
         {
             _instance = null;
             Application.RegisterLogCallback(null);
-            if (LCSConfig.IsWriteLogToFile) LCSLogFile.Clear();
+            if (LCSConfig.IsWriteLogToFile) SLLogFile.Clear();
         }
 
     }

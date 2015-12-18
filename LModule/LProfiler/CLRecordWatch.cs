@@ -37,7 +37,7 @@ namespace LGame.LProfiler
                 SLDebugHelper.WriteError("已经开始观察性能......");
                 return;
             }
-            if (entity == null) entity = new RecordWatchEntity { WatchKey = string.IsNullOrEmpty(key) ? LCSGuid.NewUpperGuid() : key };
+            if (entity == null) entity = new RecordWatchEntity { WatchKey = string.IsNullOrEmpty(key) ? SLGuid.NewUpperGuid() : key };
             entity.BeginWatch();
             AddWatch(entity);
         }

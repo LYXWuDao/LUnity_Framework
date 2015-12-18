@@ -16,7 +16,7 @@ namespace LGame.LUtils
      * 
      */
 
-    public class CLTweenEvent : LABehaviour
+    public class CLTweenEvent : ALBehaviour
     {
         private static CLTweenEvent _tweenEvent = null;
 
@@ -26,8 +26,8 @@ namespace LGame.LUtils
             {
                 if (_tweenEvent == null)
                 {
-                    GameObject create = LCSCompHelper.Create("_tween event");
-                    _tweenEvent = LCSCompHelper.FindComponet<CLTweenEvent>(create);
+                    GameObject create = SLCompHelper.Create("_tween event");
+                    _tweenEvent = SLCompHelper.FindComponet<CLTweenEvent>(create);
                     DontDestroyOnLoad(create);
                 }
                 return _tweenEvent;

@@ -13,7 +13,7 @@ using UnityEngine;
 namespace LGame.LUtils
 {
 
-    public class CLAdaptiveScene : LABehaviour
+    public class CLAdaptiveScene : ALBehaviour
     {
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace LGame.LUtils
             transform.localScale = Vector3.one;
             anchorWidget = gameObject.GetComponent<UIWidget>();
             bool isWidget = anchorWidget != null;
-            Vector2 vect = LCSCompHelper.SceneWidthAndHeight();
+            Vector2 vect = SLCompHelper.SceneWidthAndHeight();
             mSceneWidth = (int)vect.x;
             mSceneHeight = (int)vect.y;
             if (isWidget)
@@ -93,7 +93,7 @@ namespace LGame.LUtils
         {
             if (anchorUpdate == LYXAnchorUpdate.OnUpdate)
             {
-                Vector2 vect = LCSCompHelper.SceneWidthAndHeight();
+                Vector2 vect = SLCompHelper.SceneWidthAndHeight();
                 mSceneWidth = (int)vect.x;
                 mSceneHeight = (int)vect.y;
                 AdaptiveScene();

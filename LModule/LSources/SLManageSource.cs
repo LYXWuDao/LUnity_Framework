@@ -18,7 +18,7 @@ namespace LGame.LSource
      * 
      */
 
-    public sealed class LCSManageSource : LATManager<LoadSourceEntity>
+    public sealed class SLManageSource : ATLManager<LoadSourceEntity>
     {
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace LGame.LSource
         /// 不允许实例化
         /// 
         /// </summary>
-        private LCSManageSource()
+        private SLManageSource()
         {
         }
 
@@ -42,7 +42,7 @@ namespace LGame.LSource
         private static void AsyncLoadAssetSource(LoadSourceEntity entity, string resName, string bundPath, LoadType type)
         {
             LoadSourceEntity old = null;
-            if (TryFind<LCSManageSource>(resName, out old))
+            if (TryFind<SLManageSource>(resName, out old))
             {
                 AsyncLoadAssetCallback(old);
                 return;
@@ -50,7 +50,7 @@ namespace LGame.LSource
             entity.ResName = resName;
             entity.BundlePath = bundPath;
             entity.Type = type;
-            LCAsyncLoadSource.Instance.LoadSource(entity, AsyncLoadAssetCallback);
+            CLAsyncLoadSource.Instance.LoadSource(entity, AsyncLoadAssetCallback);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace LGame.LSource
                     entity.CallAudioSource(entity.ResName, entity.LoadObj as AudioSource);
                     break;
             }
-            Add<LCSManageSource>(entity.ResName, entity);
+            Add<SLManageSource>(entity.ResName, entity);
         }
 
         /// <summary>
@@ -114,10 +114,10 @@ namespace LGame.LSource
         private static UnityEngine.Object SyncLoadSource(string resName, string bundPath)
         {
             LoadSourceEntity entity = null;
-            if (TryFind<LCSManageSource>(resName, out entity)) return entity.LoadObj;
-            entity = LCSLoadSource.LoadAssetBundleSource(resName, bundPath);
+            if (TryFind<SLManageSource>(resName, out entity)) return entity.LoadObj;
+            entity = SLLoadSource.LoadAssetBundleSource(resName, bundPath);
             if (entity == null) return null;
-            Add<LCSManageSource>(resName, entity);
+            Add<SLManageSource>(resName, entity);
             return entity.LoadObj;
         }
 
@@ -294,11 +294,11 @@ namespace LGame.LSource
         public static string LoadTextAsset(string resName, string bundPath)
         {
             LoadSourceEntity entity = null;
-            if (TryFind<LCSManageSource>(resName, out entity)) return entity.TextContent;
-            entity = LCSLoadSource.LoadSourceBytes(resName, bundPath);
+            if (TryFind<SLManageSource>(resName, out entity)) return entity.TextContent;
+            entity = SLLoadSource.LoadSourceBytes(resName, bundPath);
             if (entity == null) return string.Empty;
             entity.TextContent = System.Text.Encoding.UTF8.GetString(entity.SourceBytes);
-            Add<LCSManageSource>(resName, entity);
+            Add<SLManageSource>(resName, entity);
             return entity.TextContent;
         }
 
@@ -315,13 +315,13 @@ namespace LGame.LSource
                 return false;
             }
             LoadSourceEntity entity;
-            if (!TryFind<LCSManageSource>(resName, out entity))
+            if (!TryFind<SLManageSource>(resName, out entity))
             {
                 SLDebugHelper.WriteError("移出的资源不存在！,resName = " + resName);
                 return false;
             }
-            LCSUnloadSource.UnLoadSource(entity.Bundle);
-            Remove<LCSManageSource>(resName);
+            SLUnloadSource.UnLoadSource(entity.Bundle);
+            Remove<SLManageSource>(resName);
             return true;
         }
 
@@ -331,9 +331,9 @@ namespace LGame.LSource
         /// <returns></returns>
         public static void RemoveAllSource()
         {
-            foreach (LoadSourceEntity entity in FindValues<LCSManageSource>())
-                LCSUnloadSource.UnLoadSource(entity.Bundle);
-            Remove<LCSManageSource>();
+            foreach (LoadSourceEntity entity in FindValues<SLManageSource>())
+                SLUnloadSource.UnLoadSource(entity.Bundle);
+            Remove<SLManageSource>();
         }
 
     }

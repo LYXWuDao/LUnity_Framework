@@ -15,7 +15,7 @@ namespace LGame.LDebug
      * 
      */
 
-    public class LCLogGUI : LABehaviour, LIDeBug
+    public class CLLogGUI : ALBehaviour, ILDeBug
     {
         /// <summary>
         /// 输出日志列表
@@ -27,7 +27,7 @@ namespace LGame.LDebug
         /// 
         /// 实现单例模式
         /// </summary>
-        private static LCLogGUI _instance = null;
+        private static CLLogGUI _instance = null;
 
         /// <summary>
         /// 用于线程锁
@@ -37,7 +37,7 @@ namespace LGame.LDebug
         /// <summary>
         /// 创建 gui 日志输出实例
         /// </summary>
-        public static LCLogGUI Instance
+        public static CLLogGUI Instance
         {
             get
             {
@@ -46,8 +46,8 @@ namespace LGame.LDebug
                 {
                     if (_instance == null)
                     {
-                        GameObject create = LCSCompHelper.Create("_GUI Debug");
-                        _instance = LCSCompHelper.FindComponet<LCLogGUI>(create);
+                        GameObject create = SLCompHelper.Create("_GUI Debug");
+                        _instance = SLCompHelper.FindComponet<CLLogGUI>(create);
                         DontDestroyOnLoad(create);
                     }
                 }

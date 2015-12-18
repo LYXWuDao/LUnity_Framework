@@ -13,7 +13,7 @@ namespace LGame.LCommon
      * 
      */
 
-    public class LCSGuid
+    public class SLGuid
     {
 
         /// <summary>

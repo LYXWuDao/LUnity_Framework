@@ -23,9 +23,9 @@ namespace LGame.LDebug
         public static void Write(object msg)
         {
             if (!LCSConfig.IsDebugMode) return;
-            LCSConsole.Write(msg);
-            if (LCSConfig.IsWriteLogToFile) LCSLogFile.Write(msg);
-            if (LCSConfig.IsWriteLogToGui) LCSLogGUI.Write(msg);
+            SLConsole.Write(msg);
+            if (LCSConfig.IsWriteLogToFile) SLLogFile.Write(msg);
+            if (LCSConfig.IsWriteLogToGui) SLLogGUI.Write(msg);
         }
 
         /// <summary>
@@ -36,9 +36,9 @@ namespace LGame.LDebug
         public static void Write(string msg, params object[] args)
         {
             if (!LCSConfig.IsDebugMode) return;
-            LCSConsole.Write(msg, args);
-            if (LCSConfig.IsWriteLogToFile) LCSLogFile.Write(msg, args);
-            if (LCSConfig.IsWriteLogToGui) LCSLogGUI.Write(msg, args);
+            SLConsole.Write(msg, args);
+            if (LCSConfig.IsWriteLogToFile) SLLogFile.Write(msg, args);
+            if (LCSConfig.IsWriteLogToGui) SLLogGUI.Write(msg, args);
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace LGame.LDebug
         public static void Write(params object[] args)
         {
             if (!LCSConfig.IsDebugMode) return;
-            LCSConsole.Write(args);
-            if (LCSConfig.IsWriteLogToFile) LCSLogFile.Write(args);
-            if (LCSConfig.IsWriteLogToGui) LCSLogGUI.Write(args);
+            SLConsole.Write(args);
+            if (LCSConfig.IsWriteLogToFile) SLLogFile.Write(args);
+            if (LCSConfig.IsWriteLogToGui) SLLogGUI.Write(args);
         }
 
         /// <summary>
@@ -60,9 +60,9 @@ namespace LGame.LDebug
         public static void WriteError(object msg)
         {
             if (!LCSConfig.IsDebugMode) return;
-            LCSConsole.WriteError(msg);
-            if (LCSConfig.IsWriteLogToFile) LCSLogFile.WriteError(msg);
-            if (LCSConfig.IsWriteLogToGui) LCSLogGUI.WriteError(msg);
+            SLConsole.WriteError(msg);
+            if (LCSConfig.IsWriteLogToFile) SLLogFile.WriteError(msg);
+            if (LCSConfig.IsWriteLogToGui) SLLogGUI.WriteError(msg);
         }
 
         /// <summary>
@@ -73,9 +73,9 @@ namespace LGame.LDebug
         public static void WriteError(string msg, params object[] args)
         {
             if (!LCSConfig.IsDebugMode) return;
-            LCSConsole.WriteError(msg, args);
-            if (LCSConfig.IsWriteLogToFile) LCSLogFile.WriteError(msg, args);
-            if (LCSConfig.IsWriteLogToGui) LCSLogGUI.WriteError(msg, args);
+            SLConsole.WriteError(msg, args);
+            if (LCSConfig.IsWriteLogToFile) SLLogFile.WriteError(msg, args);
+            if (LCSConfig.IsWriteLogToGui) SLLogGUI.WriteError(msg, args);
         }
 
         /// <summary>
@@ -85,9 +85,9 @@ namespace LGame.LDebug
         public static void WriteError(params object[] args)
         {
             if (!LCSConfig.IsDebugMode) return;
-            LCSConsole.WriteError(args);
-            if (LCSConfig.IsWriteLogToFile) LCSLogFile.WriteError(args);
-            if (LCSConfig.IsWriteLogToGui) LCSLogGUI.WriteError(args);
+            SLConsole.WriteError(args);
+            if (LCSConfig.IsWriteLogToFile) SLLogFile.WriteError(args);
+            if (LCSConfig.IsWriteLogToGui) SLLogGUI.WriteError(args);
         }
 
         /// <summary>
@@ -97,9 +97,9 @@ namespace LGame.LDebug
         public static void WriteWarning(object msg)
         {
             if (!LCSConfig.IsDebugMode) return;
-            LCSConsole.WriteWarning(msg);
-            if (LCSConfig.IsWriteLogToFile) LCSLogFile.WriteWarning(msg);
-            if (LCSConfig.IsWriteLogToGui) LCSLogGUI.WriteWarning(msg);
+            SLConsole.WriteWarning(msg);
+            if (LCSConfig.IsWriteLogToFile) SLLogFile.WriteWarning(msg);
+            if (LCSConfig.IsWriteLogToGui) SLLogGUI.WriteWarning(msg);
         }
 
         /// <summary>
@@ -110,9 +110,9 @@ namespace LGame.LDebug
         public static void WriteWarning(string msg, params object[] args)
         {
             if (!LCSConfig.IsDebugMode) return;
-            LCSConsole.WriteWarning(msg, args);
-            if (LCSConfig.IsWriteLogToFile) LCSLogFile.WriteWarning(msg, args);
-            if (LCSConfig.IsWriteLogToGui) LCSLogGUI.WriteWarning(msg, args);
+            SLConsole.WriteWarning(msg, args);
+            if (LCSConfig.IsWriteLogToFile) SLLogFile.WriteWarning(msg, args);
+            if (LCSConfig.IsWriteLogToGui) SLLogGUI.WriteWarning(msg, args);
         }
 
         /// <summary>
@@ -122,9 +122,9 @@ namespace LGame.LDebug
         public static void WriteWarning(params object[] args)
         {
             if (!LCSConfig.IsDebugMode) return;
-            LCSConsole.WriteWarning(args);
-            if (LCSConfig.IsWriteLogToFile) LCSLogFile.WriteWarning(args);
-            if (LCSConfig.IsWriteLogToGui) LCSLogGUI.WriteWarning(args);
+            SLConsole.WriteWarning(args);
+            if (LCSConfig.IsWriteLogToFile) SLLogFile.WriteWarning(args);
+            if (LCSConfig.IsWriteLogToGui) SLLogGUI.WriteWarning(args);
         }
 
     }

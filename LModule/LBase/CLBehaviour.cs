@@ -11,7 +11,7 @@ namespace LGame.LBehaviour
      * 
      */
 
-    public class LCBaseBehaviour : MonoBehaviour
+    public class CLBehaviour : MonoBehaviour
     {
 
     }

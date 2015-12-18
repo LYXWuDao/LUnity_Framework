@@ -15,14 +15,14 @@ namespace LGame.LCommon
      * 
      */
 
-    public class LCCoroutine : LABehaviour
+    public class CLCoroutine : ALBehaviour
     {
 
-        private static LCCoroutine _instance;
+        private static CLCoroutine _instance;
 
         private static object _lock = new object();
 
-        public static LCCoroutine Instance
+        public static CLCoroutine Instance
         {
             get
             {
@@ -32,8 +32,8 @@ namespace LGame.LCommon
                     {
                         if (_instance == null)
                         {
-                            GameObject create = LCSCompHelper.Create("_async load");
-                            _instance = LCSCompHelper.FindComponet<LCCoroutine>(create);
+                            GameObject create = SLCompHelper.Create("_game coroutine");
+                            _instance = SLCompHelper.FindComponet<CLCoroutine>(create);
                         }
                     }
                 }

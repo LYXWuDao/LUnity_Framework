@@ -12,7 +12,7 @@ using UnityEngine;
 namespace LGame.LSource
 {
 
-    public class LCSUnloadSource
+    public class SLUnloadSource
     {
 
         /// <summary>

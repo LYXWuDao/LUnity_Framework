@@ -15,7 +15,7 @@ using System.Collections;
 namespace LGame.LUtils
 {
 
-    public class CLUIInset3D : LABehaviour
+    public class CLUIInset3D : ALBehaviour
     {
 
         /// <summary>

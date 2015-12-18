@@ -15,7 +15,7 @@ namespace LGame.LBase
      * 
      */
 
-    public abstract class LATManager<TValue>
+    public abstract class ATLManager<TValue>
     {
 
         /// <summary>

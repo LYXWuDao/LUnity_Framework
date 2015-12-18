@@ -14,7 +14,7 @@ namespace LGame.LProfiler
      * 
      */
 
-    public class CLUnityFPS : LABehaviour
+    public class CLUnityFPS : ALBehaviour
     {
 
         /// <summary>

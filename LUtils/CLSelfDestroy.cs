@@ -15,7 +15,7 @@ namespace LGame.LUtils
      */
 
 
-    public class CLSelfDestroy : LABehaviour
+    public class CLSelfDestroy : ALBehaviour
     {
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace LGame.LUtils
         /// <returns></returns>
         public static CLSelfDestroy Begin(GameObject go, float dtyTime)
         {
-            CLSelfDestroy dest = LCSCompHelper.FindComponet<CLSelfDestroy>(go);
+            CLSelfDestroy dest = SLCompHelper.FindComponet<CLSelfDestroy>(go);
             dest.mDtyTime = dtyTime;
             return dest;
         }
@@ -43,7 +43,7 @@ namespace LGame.LUtils
                 mDtyTime -= deltaTime;
                 return;
             }
-            GameObject.Destroy(gameObject);
+            Destroy();
         }
 
     }

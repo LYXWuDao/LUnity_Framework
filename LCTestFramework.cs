@@ -13,7 +13,7 @@ using UnityEngine;
  * 
  */
 
-public class LCTestFramework : LABehaviour
+public class LCTestFramework : ALBehaviour
 {
 
     public override void Awake()

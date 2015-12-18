@@ -17,7 +17,7 @@ using UnityEngine;
 namespace LGame.LSource
 {
 
-    public static class LCSLoadSource
+    public static class SLLoadSource
     {
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace LGame.LSource
         public static LoadSourceEntity LoadAssetBundleSource(string resName, string bundPath)
         {
             if (string.IsNullOrEmpty(bundPath)) bundPath = resName;
-            string path = LCSPathHelper.UnityLoadSourcePath() + bundPath;
+            string path = SLPathHelper.UnityLoadSourcePath() + bundPath;
             return LoadBinarySources(resName, path);
         }
 
@@ -122,7 +122,7 @@ namespace LGame.LSource
                 SLDebugHelper.WriteError("加载 bundPath 路径为空, bundPath = string.Empty.");
                 return null;
             }
-            string path = LCSPathHelper.UnityLoadSourcePath() + bundPath;
+            string path = SLPathHelper.UnityLoadSourcePath() + bundPath;
             return new LoadSourceEntity
             {
                 BundlePath = bundPath,

@@ -12,7 +12,7 @@ using UnityEngine;
 namespace LGame.LCommon
 {
 
-    public static class LCSPathHelper
+    public static class SLPathHelper
     {
 
         /// <summary>
