@@ -59,12 +59,14 @@ namespace LGame.LCommon
         /// 
         /// 资源打包存放根目录
         /// 
-        /// untiy assets 目录下 SourceAssets 文件夹
+        /// 例如：LUnity_Project_Data/android/
+        /// 
         /// </summary>
         /// <returns></returns>
         public static string UnityBuildRootPath()
         {
-            return "E:/selfworkspace/LUnity/LUnity_Project_Data/android/";
+            string path = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
+            return string.Format("{0}/LUnity_Project_Data/android/", path);
         }
 
         /// <summary>

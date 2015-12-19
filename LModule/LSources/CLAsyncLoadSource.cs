@@ -79,31 +79,11 @@ namespace LGame.LSource
         }
 
         /// <summary>
-        /// 直接从 Resources 文件夹下加载资源
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        private IEnumerator StartLoad(ResourceRequest request, LoadSourceEntity entity, Action<LoadSourceEntity> callback)
-        {
-            if (entity == null) yield return 0;
-            if (request == null)
-            {
-                SLDebugHelper.WriteError("异步加载 ResourceRequest 不存在!, request = null");
-                yield return 0;
-            }
-            yield return request;
-            if (callback == null) yield return 0;
-            entity.LoadObj = request.asset;
-            callback(entity);
-        }
-
-        /// <summary>
         /// 使用二进制方式加载资源
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="entity">异步加载资源实体类</param>
         /// <param name="loadPath">真实的加载路径</param>
-        /// <param name="callback"></param>
+        /// <param name="callback">加载换成回调</param>
         private void LoadBinarySources(LoadSourceEntity entity, string loadPath, Action<LoadSourceEntity> callback)
         {
             if (entity == null)
@@ -130,84 +110,9 @@ namespace LGame.LSource
                 return;
             }
 
-            if (!File.Exists(loadPath))
-            {
-                SLDebugHelper.WriteError("导入 AssetBundle 路径不存在, loadPath = " + loadPath);
-                return;
-            }
-
-            byte[] bytes = File.ReadAllBytes(loadPath);
+            byte[] bytes = SLManageSource.GetLoadFileBytes(loadPath);
             AssetBundleCreateRequest request = AssetBundle.CreateFromMemory(bytes);
             // 开始异步加载
-            CLCoroutine.Instance.StartCoroutine(StartLoad(request, entity, callback));
-        }
-
-        /// <summary>
-        /// 加载打包资源文件夹 
-        /// 
-        /// SourceAssets 下的文件
-        /// 
-        /// entity.BundlePath  相对于 SourceAssets 文件夹路径
-        /// </summary>
-        /// <param name="entity">资源管理实体</param>
-        /// <param name="callback">资源管理类的回调函数</param>
-        private void LoadBuildSources(LoadSourceEntity entity, Action<LoadSourceEntity> callback)
-        {
-            if (entity == null) return;
-            if (string.IsNullOrEmpty(entity.BundlePath)) entity.BundlePath = entity.ResName;
-            string loadPath = SLPathHelper.UnityBuildRootPath() + entity.BundlePath;
-            LoadBinarySources(entity, loadPath, callback);
-        }
-
-        /// <summary>
-        /// 加载 streamingAssets 文件夹下的文件
-        /// 
-        /// entity.BundlePath 相对于 streamingAssets 文件夹的路径
-        /// </summary>
-        /// <param name="entity">资源管理实体</param>
-        /// <param name="callback">资源管理类的回调函数</param>
-        private void LoadStreamingSources(LoadSourceEntity entity, Action<LoadSourceEntity> callback)
-        {
-            if (entity == null) return;
-            if (string.IsNullOrEmpty(entity.BundlePath)) entity.BundlePath = entity.ResName;
-            string loadPath = SLPathHelper.UnityStreamingAssets() + entity.BundlePath;
-            LoadBinarySources(entity, loadPath, callback);
-        }
-
-        /// <summary>
-        /// 
-        /// 直接在 Resources 文件夹下加载文件
-        /// 
-        /// </summary>
-        /// <param name="entity">
-        /// 
-        /// 资源管理实体
-        /// 
-        /// LoadSourceEntity 资源实体的 BundlePath 为相对于 Resources 路径
-        /// 
-        /// </param>
-        /// <param name="callback">资源管理类的回调函数</param>
-        private void LoadResources(LoadSourceEntity entity, Action<LoadSourceEntity> callback)
-        {
-            if (entity == null)
-            {
-                SLDebugHelper.WriteError("资源加载实体数据为空，不能加载！");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(entity.ResName))
-            {
-                SLDebugHelper.WriteError("加载资源的名字为空, resName = string.Empty");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(entity.BundlePath))
-            {
-                SLDebugHelper.WriteError("加载资源的路径, BundlePath = string.Empty");
-                return;
-            }
-
-            ResourceRequest request = Resources.LoadAsync(entity.BundlePath);
             CLCoroutine.Instance.StartCoroutine(StartLoad(request, entity, callback));
         }
 
@@ -233,14 +138,16 @@ namespace LGame.LSource
         }
 
         /// <summary>
-        /// 导入资源
+        /// 加载 assetbundle 资源文件
         /// </summary>
         /// <param name="entity">加载资源后实体</param>
         /// <param name="callback">加载完成后回调</param>
-        public void LoadSource(LoadSourceEntity entity, Action<LoadSourceEntity> callback)
+        public void LoadAssetSource(LoadSourceEntity entity, Action<LoadSourceEntity> callback)
         {
-            // LoadBuildSources(entity, callback);
-            LoadResources(entity, callback);
+            if (entity == null || callback == null) return;
+            if (string.IsNullOrEmpty(entity.BundlePath)) entity.BundlePath = entity.ResName;
+            string filePath = SLPathHelper.UnityLoadSourcePath() + entity.BundlePath;
+            LoadBinarySources(entity, filePath, callback);
         }
 
     }

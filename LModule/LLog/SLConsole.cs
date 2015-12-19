@@ -20,7 +20,7 @@ namespace LGame.LDebug
         /// <param name="logType">输出的类型</param>
         private static void WriteDebug(object msg, DebugType logType)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             switch (logType)
             {
                 case DebugType.Log:
@@ -60,7 +60,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public static void Write(params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             for (int i = 0; i < args.Length; ++i)
             {
@@ -95,7 +95,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public static void WriteError(params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             for (int i = 0; i < args.Length; ++i)
             {
@@ -130,7 +130,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public static void WriteWarning(params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             for (int i = 0; i < args.Length; ++i)
             {

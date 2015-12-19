@@ -19,7 +19,7 @@ namespace LGame.LCommon
     /// <summary>
     /// 公用配置
     /// </summary>
-    public static class LCSConfig
+    public static class SLConfig
     {
 
         /// <summary>
@@ -185,6 +185,11 @@ namespace LGame.LCommon
         /// 加载 资源 AssetBundle 的路径
         /// </summary>
         public string BundlePath = string.Empty;
+
+        /// <summary>
+        /// 加载的脚步
+        /// </summary>
+        public string WinScript = string.Empty;
 
         /// <summary>
         /// 资源加载类型
@@ -433,7 +438,7 @@ namespace LGame.LCommon
         public virtual void Add(TKey key, TValue value)
         {
             TValue old;
-            if (!DicEntitys.ContainsKey(key) || DicEntitys.TryGetValue(key, out old)) return;
+            if (DicEntitys.ContainsKey(key)) return;
             DicEntitys.Add(key, value);
             Values.Add(value);
             Keys.Add(key);

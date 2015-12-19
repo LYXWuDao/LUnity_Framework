@@ -26,6 +26,11 @@ namespace LGame.LUI
         private SLUIManage() { }
 
         /// <summary>
+        /// 保存异步加载的脚步数据
+        /// </summary>
+        private static LCTManagerEntity<string> _asyncScripts = new LCTManagerEntity<string>();
+
+        /// <summary>
         /// ui 界面的根节点
         /// </summary>
         private static Transform _uiRoot;
@@ -65,7 +70,7 @@ namespace LGame.LUI
             ALUIBehaviour uiSprite = SLCompHelper.GetComponent<ALUIBehaviour>(go);
             if (uiSprite != null || string.IsNullOrEmpty(winScript)) return uiSprite;
 
-            if (LCSConfig.IsLuaWindow)
+            if (SLConfig.IsLuaWindow)
             {
                 uiSprite = SLCompHelper.AddComponet<CLLuaBehaviour>(go);
                 // todo: 处理lua 初始化的问题
@@ -109,12 +114,26 @@ namespace LGame.LUI
 
             GameObject ui = GameObject.Instantiate(go) as GameObject;
             if (ui == null) return;
-            SLCompHelper.InitTransform(go, UIRoot);
+            SLCompHelper.InitTransform(ui, UIRoot);
             ALUIBehaviour win = SLCompHelper.GetComponent<ALUIBehaviour>(ui);
+            string script = _asyncScripts.Find(winName);
+            if (win == null && !string.IsNullOrEmpty(script))
+            {
+                if (SLConfig.IsLuaWindow)
+                {
+                    win = SLCompHelper.AddComponet<CLLuaBehaviour>(go);
+                    // todo: 处理lua 初始化的问题
+                }
+                else
+                {
+                    win = ui.AddComponent(script) as ALUIBehaviour;
+                }
+                _asyncScripts.Remove(winName);
+            }
 
             int depth = 1;
             ALUIBehaviour topWin = TopWindow();
-            if (topWin != null) depth = topWin.WinDepth + LCSConfig.DepthSpan;
+            if (topWin != null) depth = topWin.WinDepth + SLConfig.DepthSpan;
 
             // 初始化当前界面
             win.OnOpen(depth, winName);
@@ -216,7 +235,7 @@ namespace LGame.LUI
             ALUIBehaviour topWin = TopWindow();
             if (topWin != null)
             {
-                depth = topWin.WinDepth + LCSConfig.DepthSpan;
+                depth = topWin.WinDepth + SLConfig.DepthSpan;
                 topWin.OnLostFocus();
             }
 
@@ -236,7 +255,7 @@ namespace LGame.LUI
         /// </summary>
         /// <param name="winName"></param>
         /// <param name="winPath"></param>
-        public static void AsyncOpenWindow(string winName, string winPath)
+        public static void AsyncOpenWindow(string winName, string winPath, string winScript = "")
         {
             ALUIBehaviour win = null;
             if (TryFind<SLUIManage>(winName, out win)) return;
@@ -245,6 +264,7 @@ namespace LGame.LUI
             ALUIBehaviour topWin = TopWindow();
             if (topWin != null) topWin.OnLostFocus();
 
+            _asyncScripts.Add(winName, winScript);
             SLManageSource.AsyncLoadAssetSource(winName, winPath, AsyncOpenWindowCallback);
         }
 

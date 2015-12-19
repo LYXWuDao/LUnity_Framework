@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using LGame.LBase;
 using LGame.LCommon;
 using LGame.LDebug;
+using LGame.LAndroid;
 using UnityEngine;
+using System.IO;
 
 namespace LGame.LSource
 {
@@ -33,7 +35,7 @@ namespace LGame.LSource
         }
 
         /// <summary>
-        /// 异步加载资源
+        /// 异步加载 assetbundle 资源
         /// </summary>
         /// <param name="entity">资源加载实体</param>
         /// <param name="resName">资源名字</param>
@@ -50,7 +52,7 @@ namespace LGame.LSource
             entity.ResName = resName;
             entity.BundlePath = bundPath;
             entity.Type = type;
-            CLAsyncLoadSource.Instance.LoadSource(entity, AsyncLoadAssetCallback);
+            CLAsyncLoadSource.Instance.LoadAssetSource(entity, AsyncLoadAssetCallback);
         }
 
         /// <summary>
@@ -120,6 +122,26 @@ namespace LGame.LSource
             Add<SLManageSource>(resName, entity);
             return entity.LoadObj;
         }
+
+        /// <summary>
+        /// 获取各平台文件的字节流
+        /// </summary>
+        /// <param name="filePath">文件的路径</param>
+        /// <returns></returns>
+        public static byte[] GetLoadFileBytes(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath)) return null;
+#if !UNITY_EDITOR && UNITY_ANDROID
+            return SLAndroidJava.GetStaticBytes("getFileBytes", filePath);
+#endif
+            if (!File.Exists(filePath))
+            {
+                SLDebugHelper.WriteError("文件路径不成长,bundPath = " + filePath);
+                return null;
+            }
+            return File.ReadAllBytes(filePath);
+        }
+
 
         /// <summary>
         /// 同步加载资源
@@ -296,7 +318,7 @@ namespace LGame.LSource
             LoadSourceEntity entity = null;
             if (TryFind<SLManageSource>(resName, out entity)) return entity.TextContent;
             entity = SLLoadSource.LoadSourceBytes(resName, bundPath);
-            if (entity == null) return string.Empty;
+            if (entity == null || entity.SourceBytes == null) return string.Empty;
             entity.TextContent = System.Text.Encoding.UTF8.GetString(entity.SourceBytes);
             Add<SLManageSource>(resName, entity);
             return entity.TextContent;

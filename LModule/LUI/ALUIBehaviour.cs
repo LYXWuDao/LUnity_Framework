@@ -19,7 +19,7 @@ namespace LGame.LUI
      * 
      */
 
-    public abstract class ALUIBehaviour : ALBehaviour, LIUIBehaviour
+    public class ALUIBehaviour : ALBehaviour, LIUIBehaviour
     {
 
         /// <summary>

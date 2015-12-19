@@ -19,26 +19,6 @@ namespace LGame.LSource
 
     public static class SLLoadSource
     {
-
-        /// <summary>
-        /// 获取各平台文件的字节流
-        /// </summary>
-        /// <param name="filePath">文件的路径</param>
-        /// <returns></returns>
-        private static byte[] GetLoadFileBytes(string filePath)
-        {
-            if (string.IsNullOrEmpty(filePath)) return null;
-#if !UNITY_EDITOR && UNITY_ANDROID
-            return SLAndroidJava.GetStaticBytes("getFileBytes", filePath);
-#endif
-            if (!File.Exists(filePath))
-            {
-                SLDebugHelper.WriteError("导入 AssetBundle 路径不存在,bundPath = " + filePath);
-                return null;
-            }
-            return File.ReadAllBytes(filePath);
-        }
-
         /// <summary>
         /// 导入资源
         /// 
@@ -61,7 +41,7 @@ namespace LGame.LSource
                 return null;
             }
 
-            byte[] bytes = GetLoadFileBytes(bundPath);
+            byte[] bytes = SLManageSource.GetLoadFileBytes(bundPath);
             if (bytes == null)
             {
                 SLDebugHelper.WriteError("获取文件的字节流数据为空! bytes = null");
@@ -127,7 +107,7 @@ namespace LGame.LSource
             {
                 BundlePath = bundPath,
                 ResName = resName,
-                SourceBytes = GetLoadFileBytes(path)
+                SourceBytes = SLManageSource.GetLoadFileBytes(path)
             };
         }
 

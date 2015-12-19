@@ -62,7 +62,7 @@ namespace LGame.LDebug
         /// <param name="color">日志颜色</param>
         private void Write(string log, Color color)
         {
-            if (!LCSConfig.IsDebugMode || string.IsNullOrEmpty(log)) return;
+            if (!SLConfig.IsDebugMode || string.IsNullOrEmpty(log)) return;
             if (_guiLogs.Count >= 20) _guiLogs.RemoveAt(0);
             _guiLogs.Add(new GuiLogEntity
             {
@@ -96,7 +96,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public void Write(params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             for (int i = 0; i < args.Length; ++i)
             {
@@ -131,7 +131,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public void WriteError(params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             for (int i = 0; i < args.Length; ++i)
             {
@@ -166,7 +166,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public void WriteWarning(params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             for (int i = 0; i < args.Length; ++i)
             {
@@ -190,7 +190,7 @@ namespace LGame.LDebug
         /// </summary>
         public override void OnGUI()
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             Rect rect = new Rect(5f, 5f, 30000f, 40f);
 
             for (int i = 0, imax = _guiLogs.Count; i < imax; ++i)

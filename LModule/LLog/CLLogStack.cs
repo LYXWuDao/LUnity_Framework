@@ -66,7 +66,7 @@ namespace LGame.LDebug
         {
             _instance = null;
             Application.RegisterLogCallback(null);
-            if (LCSConfig.IsWriteLogToFile) SLLogFile.Clear();
+            if (SLConfig.IsWriteLogToFile) SLLogFile.Clear();
         }
 
     }

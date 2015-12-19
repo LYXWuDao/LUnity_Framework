@@ -29,9 +29,9 @@ namespace LGame.LDebug
         /// <param name="msg"></param>
         private static void WriteToFile(string msg)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             if (string.IsNullOrEmpty(msg)) return;
-            if (_fileLogs.Count >= LCSConfig.LogFileCacheCount) SaveToFile();
+            if (_fileLogs.Count >= SLConfig.LogFileCacheCount) SaveToFile();
             _fileLogs.Add(msg);
         }
 
@@ -40,10 +40,10 @@ namespace LGame.LDebug
         /// </summary>
         public static void SaveToFile()
         {
-            if (!LCSConfig.IsDebugMode || _fileLogs == null) return;
+            if (!SLConfig.IsDebugMode || _fileLogs == null) return;
             string savePath = SLPathHelper.UnityLogFilePath();
             FileStream stream = File.Open(savePath, FileMode.OpenOrCreate);
-            if (stream.Length > LCSConfig.KbSize)
+            if (stream.Length > SLConfig.KbSize)
             {
                 stream.Close();
                 File.WriteAllText(savePath, "");
@@ -68,7 +68,7 @@ namespace LGame.LDebug
         /// <param name="msg">输出日志</param>
         public static void Write(object msg)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             WriteToFile(string.Format("[File log]:{0}", msg));
         }
 
@@ -79,7 +79,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public static void Write(string msg, params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             WriteToFile(string.Format("[File log]:" + msg, args));
         }
 
@@ -89,7 +89,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public static void Write(params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             for (int i = 0; i < args.Length; ++i)
             {
@@ -105,7 +105,7 @@ namespace LGame.LDebug
         /// <param name="msg"></param>
         public static void WriteError(object msg)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             WriteToFile(string.Format("[File Error]:{0}", msg));
         }
 
@@ -116,7 +116,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public static void WriteError(string msg, params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             WriteToFile(string.Format("[File Error]:" + msg, args));
         }
 
@@ -126,7 +126,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public static void WriteError(params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             for (int i = 0; i < args.Length; ++i)
             {
@@ -142,7 +142,7 @@ namespace LGame.LDebug
         /// <param name="msg"></param>
         public static void WriteWarning(object msg)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             WriteToFile(string.Format("[File Warning]:{0}", msg));
         }
 
@@ -153,7 +153,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public static void WriteWarning(string msg, params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             WriteToFile(string.Format("[File Warning]:" + msg, args));
         }
 
@@ -163,7 +163,7 @@ namespace LGame.LDebug
         /// <param name="args"></param>
         public static void WriteWarning(params object[] args)
         {
-            if (!LCSConfig.IsDebugMode) return;
+            if (!SLConfig.IsDebugMode) return;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             for (int i = 0; i < args.Length; ++i)
             {
