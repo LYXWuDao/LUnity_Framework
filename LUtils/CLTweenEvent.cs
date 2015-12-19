@@ -54,12 +54,13 @@ namespace LGame.LUtils
         public static void BeginAlpha(GameObject go, float duration, float from, float to)
         {
             if (go == null) return;
-            TweenAlpha alpha = TweenAlpha.Begin(go, duration, to);
-            alpha.from = from;
-            alpha.to = to;
             Instance.TweenerList.Add(new TweenerEntity()
             {
-                Tweener = alpha,
+                TweenType = TweenerType.Alpha,
+                Target = go,
+                from = from,
+                to = to,
+                Duration = duration,
                 IsImmediately = false
             });
         }
@@ -74,12 +75,13 @@ namespace LGame.LUtils
         public static void BeginAlphaImmediate(GameObject go, float duration, float from, float to)
         {
             if (go == null) return;
-            TweenAlpha alpha = TweenAlpha.Begin(go, duration, to);
-            alpha.from = from;
-            alpha.to = to;
             Instance.TweenerList.Add(new TweenerEntity()
             {
-                Tweener = alpha,
+                TweenType = TweenerType.Alpha,
+                Target = go,
+                from = from,
+                to = to,
+                Duration = duration,
                 IsImmediately = true
             });
         }
@@ -94,12 +96,13 @@ namespace LGame.LUtils
         public static void BeginPosition(GameObject go, float duration, Vector3 from, Vector3 to)
         {
             if (go == null) return;
-            TweenPosition position = TweenPosition.Begin(go, duration, to);
-            position.from = from;
-            position.to = to;
             Instance.TweenerList.Add(new TweenerEntity()
             {
-                Tweener = position,
+                TweenType = TweenerType.Position,
+                Target = go,
+                fVector = from,
+                tVector = to,
+                Duration = duration,
                 IsImmediately = false
             });
         }
@@ -114,12 +117,13 @@ namespace LGame.LUtils
         public static void BeginPositionImmediate(GameObject go, float duration, Vector3 from, Vector3 to)
         {
             if (go == null) return;
-            TweenPosition position = TweenPosition.Begin(go, duration, to);
-            position.from = from;
-            position.to = to;
             Instance.TweenerList.Add(new TweenerEntity()
             {
-                Tweener = position,
+                TweenType = TweenerType.Position,
+                Target = go,
+                fVector = from,
+                tVector = to,
+                Duration = duration,
                 IsImmediately = true
             });
         }
@@ -134,12 +138,13 @@ namespace LGame.LUtils
         public static void BeginRotation(GameObject go, float duration, Vector3 from, Vector3 to)
         {
             if (go == null) return;
-            TweenRotation rota = TweenRotation.Begin(go, duration, Quaternion.identity);
-            rota.from = from;
-            rota.to = to;
             Instance.TweenerList.Add(new TweenerEntity()
             {
-                Tweener = rota,
+                TweenType = TweenerType.Rotation,
+                Target = go,
+                fVector = from,
+                tVector = to,
+                Duration = duration,
                 IsImmediately = false
             });
         }
@@ -154,12 +159,13 @@ namespace LGame.LUtils
         public static void BeginRotationImmediate(GameObject go, float duration, Vector3 from, Vector3 to)
         {
             if (go == null) return;
-            TweenRotation rota = TweenRotation.Begin(go, duration, Quaternion.identity);
-            rota.from = from;
-            rota.to = to;
             Instance.TweenerList.Add(new TweenerEntity()
             {
-                Tweener = rota,
+                TweenType = TweenerType.Rotation,
+                Target = go,
+                fVector = from,
+                tVector = to,
+                Duration = duration,
                 IsImmediately = true
             });
         }
@@ -174,12 +180,13 @@ namespace LGame.LUtils
         public static void BeginScale(GameObject go, float duration, Vector3 from, Vector3 to)
         {
             if (go == null) return;
-            TweenScale scale = TweenScale.Begin(go, duration, to);
-            scale.from = from;
-            scale.to = to;
             Instance.TweenerList.Add(new TweenerEntity()
             {
-                Tweener = scale,
+                TweenType = TweenerType.Scale,
+                Target = go,
+                fVector = from,
+                tVector = to,
+                Duration = duration,
                 IsImmediately = false
             });
         }
@@ -194,12 +201,13 @@ namespace LGame.LUtils
         public static void BeginScaleImmediate(GameObject go, float duration, Vector3 from, Vector3 to)
         {
             if (go == null) return;
-            TweenScale scale = TweenScale.Begin(go, duration, to);
-            scale.from = from;
-            scale.to = to;
             Instance.TweenerList.Add(new TweenerEntity()
             {
-                Tweener = scale,
+                TweenType = TweenerType.Scale,
+                Target = go,
+                fVector = from,
+                tVector = to,
+                Duration = duration,
                 IsImmediately = true
             });
         }
@@ -219,8 +227,44 @@ namespace LGame.LUtils
             }
 
             TweenerEntity entity = TweenerList[0];
-            if (entity == null) return;
-            UITweener tween = entity.Tweener;
+            if (entity == null || entity.TweenType == TweenerType.None)
+            {
+                TweenerList.RemoveAt(0);
+                return;
+            }
+            entity.Target.SetActive(true);
+            UITweener tween = null;
+            switch (entity.TweenType)
+            {
+                case TweenerType.Scale:
+                    TweenScale scale = TweenScale.Begin(entity.Target, entity.Duration, entity.tVector);
+                    scale.from = entity.fVector;
+                    scale.to = entity.tVector;
+                    scale.method = UITweener.Method.EaseInOut;
+                    tween = scale;
+                    break;
+                case TweenerType.Alpha:
+                    TweenAlpha alpha = TweenAlpha.Begin(entity.Target, entity.Duration, entity.to);
+                    alpha.from = entity.from;
+                    alpha.to = entity.to;
+                    alpha.method = UITweener.Method.EaseInOut;
+                    tween = alpha;
+                    break;
+                case TweenerType.Position:
+                    TweenPosition position = TweenPosition.Begin(entity.Target, entity.Duration, entity.tVector);
+                    position.from = entity.fVector;
+                    position.to = entity.tVector;
+                    position.method = UITweener.Method.EaseInOut;
+                    tween = position;
+                    break;
+                case TweenerType.Rotation:
+                    TweenRotation rotation = TweenRotation.Begin(entity.Target, entity.Duration, Quaternion.identity);
+                    rotation.from = entity.fVector;
+                    rotation.to = entity.tVector;
+                    rotation.method = UITweener.Method.EaseInOut;
+                    tween = rotation;
+                    break;
+            }
             mTweenTime = entity.IsImmediately ? 0 : tween.duration;
             tween.PlayForward();
             TweenerList.RemoveAt(0);

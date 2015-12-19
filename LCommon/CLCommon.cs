@@ -374,9 +374,39 @@ namespace LGame.LCommon
     {
 
         /// <summary>
-        /// ngui Tweener 组件
+        /// 运动类型
         /// </summary>
-        public UITweener Tweener = null;
+        public TweenerType TweenType = TweenerType.None;
+
+        /// <summary>
+        /// 播放动作的目标对象
+        /// </summary>
+        public GameObject Target = null;
+
+        /// <summary>
+        /// 起始 Vector3
+        /// </summary>
+        public Vector3 fVector = Vector3.zero;
+
+        /// <summary>
+        /// 目标 Vector3
+        /// </summary>
+        public Vector3 tVector = Vector3.one;
+
+        /// <summary>
+        /// alpha 起始
+        /// </summary>
+        public float from = 0f;
+
+        /// <summary>
+        /// alpha 目标
+        /// </summary>
+        public float to = 1f;
+
+        /// <summary>
+        /// 运动时间
+        /// </summary>
+        public float Duration = 0f;
 
         /// <summary>
         /// 是否立即下一个
