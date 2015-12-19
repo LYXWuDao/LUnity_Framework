@@ -17,6 +17,29 @@ namespace LGame.LUtils
     public class CLDelayAction : ALBehaviour
     {
 
+        private static CLDelayAction _instance = null;
+
+        private static object _lock = new object();
+
+        private static CLDelayAction Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    lock (_lock)
+                    {
+                        if (_instance == null)
+                        {
+                            GameObject go = SLCompHelper.Create("_delay action");
+                            _instance = SLCompHelper.FindComponet<CLDelayAction>(go);
+                        }
+                    }
+                }
+                return _instance;
+            }
+        }
+
         /// <summary>
         /// 当前回调 action
         /// </summary>
@@ -40,15 +63,15 @@ namespace LGame.LUtils
             RemoveAction();
         }
 
-        public static CLDelayAction BeginAction(GameObject go, float delayTime, Action action)
+        public static CLDelayAction BeginAction(float delayTime, Action action)
         {
-            if (go == null && action == null) return null;
-            if (go == null || delayTime <= 0)
+            if (action == null) return null;
+            if (delayTime <= 0)
             {
                 action();
                 return null;
             }
-            CLDelayAction delact = SLCompHelper.FindComponet<CLDelayAction>(go);
+            CLDelayAction delact = Instance;
             delact.mActionBack = action;
             delact.mActionTime = delayTime;
             return delact;
@@ -60,6 +83,11 @@ namespace LGame.LUtils
         public void RemoveAction()
         {
             Destroy(this);
+        }
+
+        public override void OnClear()
+        {
+            _instance = null;
         }
 
     }
