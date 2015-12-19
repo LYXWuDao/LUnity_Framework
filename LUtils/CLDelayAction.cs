@@ -16,27 +16,15 @@ namespace LGame.LUtils
 
     public class CLDelayAction : ALBehaviour
     {
-
-        private static CLDelayAction _instance = null;
-
-        private static object _lock = new object();
-
+        /// <summary>
+        /// 创建时间间隔事件
+        /// </summary>
         private static CLDelayAction Instance
         {
             get
             {
-                if (_instance == null)
-                {
-                    lock (_lock)
-                    {
-                        if (_instance == null)
-                        {
-                            GameObject go = SLCompHelper.Create("_delay action");
-                            _instance = SLCompHelper.FindComponet<CLDelayAction>(go);
-                        }
-                    }
-                }
-                return _instance;
+                GameObject go = SLCompHelper.Create("_delay action");
+                return SLCompHelper.FindComponet<CLDelayAction>(go);
             }
         }
 
@@ -63,6 +51,12 @@ namespace LGame.LUtils
             RemoveAction();
         }
 
+        /// <summary>
+        /// 间隔多久后回调
+        /// </summary>
+        /// <param name="delayTime">间隔时间</param>
+        /// <param name="action">回调函数</param>
+        /// <returns></returns>
         public static CLDelayAction BeginAction(float delayTime, Action action)
         {
             if (action == null) return null;
@@ -82,12 +76,7 @@ namespace LGame.LUtils
         /// </summary>
         public void RemoveAction()
         {
-            Destroy(this);
-        }
-
-        public override void OnClear()
-        {
-            _instance = null;
+            Destroy();
         }
 
     }
