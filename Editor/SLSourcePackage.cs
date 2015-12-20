@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections;
 
-public class LCSSourcePackage : ALBehaviour
+public class SLSourcePackage : ALBehaviour
 {
 
     /// <summary>
@@ -72,16 +72,24 @@ public class LCSSourcePackage : ALBehaviour
     public static void SceneSourcePackage()
     {
         // 获得打包保存路径
-        string savePath = EditorUtility.OpenFolderPanel("package file path", "", "");
+        string savePath = EditorUtility.OpenFolderPanel("package scene file path", "", "");
         SLConsole.WriteError("save path = " + savePath);
 
         // 得到打包路径
         Object obj = Selection.activeObject;
+        if (obj == null)
+        {
+            SLConsole.WriteError("pack select file is empty");
+            return;
+        }
+        //选择文件的路径（相对于 asset 文件夹）
+        string selectPath = AssetDatabase.GetAssetPath(obj);
+        if (string.IsNullOrEmpty(selectPath) || !selectPath.Contains(".unity")) return;
         string sceneName = GetSelectionName(obj);
-        string packPath = string.Format("{0}/{1}.scene", savePath, sceneName);
-        SLConsole.WriteError("pack path = " + packPath);
-
-        string[] scenes = { string.Format("Assets/Scenes/{0}.unity", sceneName) };
+        string packPath = string.Format("{0}/{1}.data", savePath, sceneName);
+        SLConsole.WriteError("scene package path = " + packPath);
+        // 打包场景
+        string[] scenes = { selectPath };
         //打包  
         BuildPipeline.BuildPlayer(scenes, packPath, BuildTarget.Android, BuildOptions.BuildAdditionalStreamedScenes);
         AssetDatabase.Refresh();
