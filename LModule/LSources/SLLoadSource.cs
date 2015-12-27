@@ -129,6 +129,39 @@ namespace LGame.LSource
             return entity;
         }
 
+        /// <summary>
+        /// 加载场景资源
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static LoadSourceEntity LoadSceneSource(LoadSourceEntity entity)
+        {
+            entity = VerifySourceEntity(entity);
+            if (entity == null) return null;
+
+            string realPath = SLPathHelper.UnityLoadSourcePath() + entity.BundlePath;
+
+            byte[] bytes = SLManageSource.GetLoadFileBytes(realPath);
+            if (bytes == null)
+            {
+                SLDebugHelper.WriteError("获取文件的字节流数据为空! bytes = null");
+                return null;
+            }
+
+            AssetBundle bundle = AssetBundle.CreateFromMemoryImmediate(bytes);
+
+            if (bundle == null)
+            {
+                SLDebugHelper.WriteError("创建资源 AssetBundle 失败!");
+                return null;
+            }
+
+            entity.Bundle = bundle;
+            entity.LoadObj = null;
+            entity.Progress = 1;
+            entity.IsDone = true;
+            return entity;
+        }
     }
 
 }

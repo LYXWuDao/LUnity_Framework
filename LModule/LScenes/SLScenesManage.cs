@@ -39,19 +39,12 @@ namespace LGame.LScenes
         /// 场景加载完成时回调
         /// </summary>
         /// <param name="sceneName">加载的场景名字</param>
-        /// <param name="obj">场景的对象</param>
-        private static void LoadSceneFinish(string sceneName, UnityEngine.Object obj)
+        private static void LoadSceneFinish(string sceneName)
         {
             CurrentName = string.Empty;
             if (string.IsNullOrEmpty(sceneName))
             {
                 SLDebugHelper.WriteError("打开的场景名字为空 sceneName = string.Empty");
-                return;
-            }
-
-            if (obj == null)
-            {
-                SLDebugHelper.WriteError("资源加载失败!");
                 return;
             }
 
@@ -153,8 +146,8 @@ namespace LGame.LScenes
             CurrentName = sceneName;
             CurrentScript = sceneScript;
             LoadFinish = finish;
-            LoadSourceEntity entity = SLManageSource.LoadAssetSource(sceneName, scenePath, LoadType.Object);
-            LoadSceneFinish(sceneName, entity != null ? entity.LoadObj : null);
+            LoadSourceEntity entity = SLManageSource.LoadSceneAssetSource(sceneName, scenePath);
+            LoadSceneFinish(sceneName);
         }
 
         /// <summary>
@@ -194,9 +187,9 @@ namespace LGame.LScenes
             CurrentName = sceneName;
             CurrentScript = sceneScript;
             LoadFinish = finish;
-            SLManageSource.AsyncLoadAssetSource(sceneName, scenePath, LoadType.Object, delegate(LoadSourceEntity entity)
+            SLManageSource.AsyncLoadSceneAssetSource(sceneName, scenePath, delegate(LoadSourceEntity entity)
             {
-                LoadSceneFinish(sceneName, entity != null ? entity.LoadObj : null);
+                LoadSceneFinish(sceneName);
             });
         }
 

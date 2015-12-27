@@ -34,6 +34,10 @@ namespace LGame.LSource
             TextSource = 3,
 
             Resource = 4,
+
+            SceneSource = 5,
+
+            AsyncSceneSource = 6,
         }
 
         /// <summary>
@@ -64,6 +68,12 @@ namespace LGame.LSource
                     break;
                 case LoadWay.Resource:
                     load = SLLoadSource.LoadResources(entity);
+                    break;
+                case LoadWay.SceneSource:
+                    load = SLLoadSource.LoadSceneSource(entity);
+                    break;
+                case LoadWay.AsyncSceneSource:
+                    load = CLAsyncLoadSource.Instance.AsyncLoadSceneAssetSource(entity, finish);
                     break;
             }
 
@@ -146,6 +156,28 @@ namespace LGame.LSource
         public static LoadSourceEntity LoadResource(string resName, string bundPath, LoadType ltype)
         {
             return LoadSource(resName, bundPath, LoadType.TextContent, LoadWay.Resource);
+        }
+
+        /// <summary>
+        /// 导入场景资源
+        /// </summary>
+        /// <returns></returns>
+        public static LoadSourceEntity LoadSceneAssetSource(string resName, string bundPath)
+        {
+            return LoadSource(resName, bundPath, LoadType.Object, LoadWay.SceneSource, null);
+        }
+
+        /// <summary>
+        /// 异步加载场景资源
+        /// </summary>
+        /// <param name="resName"></param>
+        /// <param name="bundPath"></param>
+        /// <param name="ltype"></param>
+        /// <param name="finish"></param>
+        /// <returns></returns>
+        public static LoadSourceEntity AsyncLoadSceneAssetSource(string resName, string bundPath, Action<LoadSourceEntity> finish)
+        {
+            return LoadSource(resName, bundPath, LoadType.Object, LoadWay.AsyncSceneSource, finish);
         }
 
         /// <summary>
