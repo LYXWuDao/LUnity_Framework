@@ -28,11 +28,30 @@ namespace LGame.LCommon
         /// <summary>
         ///  创建 gameobject
         /// </summary>
+        /// <returns></returns>
+        public static T Create<T>() where T : Component
+        {
+            return Create<T>("game object", null);
+        }
+
+        /// <summary>
+        ///  创建 gameobject
+        /// </summary>
         /// <param name="name">创建的 gameobject 名字 </param>
         /// <returns></returns>
         public static GameObject Create(string name)
         {
             return Create(name, null);
+        }
+
+        /// <summary>
+        ///  创建 gameobject
+        /// </summary>
+        /// <param name="name">创建的 gameobject 名字 </param>
+        /// <returns></returns>
+        public static T Create<T>(string name) where T : Component
+        {
+            return Create<T>(name, null);
         }
 
         /// <summary>
@@ -51,11 +70,34 @@ namespace LGame.LCommon
         /// </summary>
         /// <param name="name">创建的 gameobject 名字</param>
         /// <param name="parent">创建的 gameobject 父节点</param>
+        /// <returns></returns>
+        public static T Create<T>(string name, Transform parent) where T : Component
+        {
+            return Create<T>(name, parent, null);
+        }
+
+        /// <summary>
+        ///  创建 gameobject
+        /// </summary>
+        /// <param name="name">创建的 gameobject 名字</param>
+        /// <param name="parent">创建的 gameobject 父节点</param>
         /// <param name="t">创建 gameobject 类型 </param>
         /// <returns></returns>
         public static GameObject Create(string name, Transform parent, Type t)
         {
             return CreateInstance(name, parent, t);
+        }
+
+        /// <summary>
+        ///  创建 gameobject
+        /// </summary>
+        /// <param name="name">创建的 gameobject 名字</param>
+        /// <param name="parent">创建的 gameobject 父节点</param>
+        /// <param name="t">创建 gameobject 类型 </param>
+        /// <returns></returns>
+        public static T Create<T>(string name, Transform parent, Type t) where T : Component
+        {
+            return CreateInstance<T>(name, parent, t);
         }
 
         /// <summary>
@@ -71,6 +113,21 @@ namespace LGame.LCommon
             trans.localRotation = Quaternion.identity;
             trans.localScale = Vector3.one;
             return create;
+        }
+
+        /// <summary>
+        /// 创建一个 挂载 T 脚本的 gameobject 并且实例和初始化
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="parent"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static T CreateInstance<T>(string name, Transform parent, Type t) where T : Component
+        {
+            GameObject create = CreateInstance(name, parent, t);
+            if (create == null) return default(T);
+            return FindComponet<T>(create);
         }
 
         /// <summary>

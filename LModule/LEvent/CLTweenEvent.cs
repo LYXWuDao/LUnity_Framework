@@ -26,9 +26,8 @@ namespace LGame.LEvent
             {
                 if (_tweenEvent == null)
                 {
-                    GameObject create = SLCompHelper.Create("_tween event");
-                    _tweenEvent = SLCompHelper.FindComponet<CLTweenEvent>(create);
-                    DontDestroyOnLoad(create);
+                    _tweenEvent = SLCompHelper.Create<CLTweenEvent>("_tween event");
+                    DontDestroyOnLoad(_tweenEvent);
                 }
                 return _tweenEvent;
             }

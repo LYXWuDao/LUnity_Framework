@@ -32,8 +32,7 @@ namespace LGame.LCommon
                     {
                         if (_instance == null)
                         {
-                            GameObject create = SLCompHelper.Create("_game coroutine");
-                            _instance = SLCompHelper.FindComponet<CLCoroutine>(create);
+                            _instance = SLCompHelper.Create<CLCoroutine>("_game coroutine");
                         }
                     }
                 }
