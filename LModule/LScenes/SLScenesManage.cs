@@ -68,6 +68,7 @@ namespace LGame.LScenes
                 // 当前已经打开一个场景
                 CLSceneBehaviour curr = Find<SLScenesManage>(CurrentName);
                 curr.OnLeaveScene();
+                Remove<SLScenesManage>(CurrentName);
             }
 
             CurrentName = sceneName;
