@@ -131,6 +131,48 @@ namespace LGame.LCommon
         }
 
         /// <summary>
+        /// 实例化对象，并且初始化位置
+        /// </summary>
+        /// <returns></returns>
+        public static GameObject InitInstance(GameObject inst)
+        {
+            return InitInstance(inst, null);
+        }
+
+        /// <summary>
+        /// 实例化对象，并且初始化位置
+        /// </summary>
+        /// <returns></returns>
+        public static T InitInstance<T>(GameObject inst) where T : Component
+        {
+            return InitInstance<T>(inst, null);
+        }
+
+        /// <summary>
+        /// 实例化对象，并且初始化位置
+        /// </summary>
+        /// <returns></returns>
+        public static GameObject InitInstance(GameObject inst, Transform parent)
+        {
+            if (inst == null) return null;
+            GameObject go = GameObject.Instantiate(inst) as GameObject;
+            if (go == null) return null;
+            InitTransform(go, parent);
+            return go;
+        }
+
+        /// <summary>
+        /// 实例化对象，并且初始化位置
+        /// </summary>
+        /// <returns></returns>
+        public static T InitInstance<T>(GameObject inst, Transform parent) where T : Component
+        {
+            GameObject go = InitInstance(inst, parent);
+            if (go == null) return default(T);
+            return FindComponet<T>(go);
+        }
+
+        /// <summary>
         /// 查找组件
         /// </summary>
         /// <typeparam name="T">组件的类型</typeparam>

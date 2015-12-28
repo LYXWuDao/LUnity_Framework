@@ -65,9 +65,8 @@ namespace LGame.LUI
                 SLDebugHelper.WriteError("加载的资源不存在!");
                 return null;
             }
-            GameObject go = GameObject.Instantiate(ui) as GameObject;
+            GameObject go = SLCompHelper.InitInstance(ui, UIRoot);
             if (go == null) return null;
-            SLCompHelper.InitTransform(go, UIRoot);
             CLUIBehaviour uiSprite = SLCompHelper.GetComponent<CLUIBehaviour>(go);
             if (uiSprite != null || string.IsNullOrEmpty(winScript)) return uiSprite;
 
@@ -113,16 +112,15 @@ namespace LGame.LUI
                 return;
             }
 
-            GameObject ui = GameObject.Instantiate(go) as GameObject;
+            GameObject ui = SLCompHelper.InitInstance(go, UIRoot);
             if (ui == null) return;
-            SLCompHelper.InitTransform(ui, UIRoot);
             CLUIBehaviour win = SLCompHelper.GetComponent<CLUIBehaviour>(ui);
             string script = _asyncScripts.Find(winName);
             if (win == null && !string.IsNullOrEmpty(script))
             {
                 if (SLConfig.IsLuaWindow)
                 {
-                    win = SLCompHelper.AddComponet<CLUILuaBehaviour>(go);
+                    win = SLCompHelper.AddComponet<CLUILuaBehaviour>(ui);
                     // todo: 处理lua 初始化的问题
                 }
                 else
