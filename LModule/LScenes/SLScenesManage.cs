@@ -67,7 +67,7 @@ namespace LGame.LScenes
             {
                 // 当前已经打开一个场景
                 CLSceneBehaviour curr = Find<SLScenesManage>(CurrentName);
-                curr.OnLeaveScene();
+                curr.LeaveScene();
                 Remove<SLScenesManage>(CurrentName);
             }
 
@@ -115,7 +115,7 @@ namespace LGame.LScenes
 
             if (scene == null) scene = SLCompHelper.FindComponet<CLSceneBehaviour>(root);
 
-            scene.OnEnterScene();
+            scene.EnterScene();
             Add<SLScenesManage>(sceneName, scene);
             CurrentScript = string.Empty;
             CurrentName = sceneName;
