@@ -129,7 +129,7 @@ namespace LGame.LSource
         /// <returns></returns>
         public static LoadSourceEntity AsyncLoadAssetSource(string resName, string bundPath, LoadType ltype, Action<LoadSourceEntity> finish)
         {
-            return LoadSource(resName, bundPath, ltype, LoadWay.SyncAsset, finish);
+            return LoadSource(resName, bundPath, ltype, LoadWay.AsyncAsset, finish);
         }
 
         /// <summary>
