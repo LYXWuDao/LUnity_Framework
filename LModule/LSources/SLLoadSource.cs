@@ -6,18 +6,21 @@ using LGame.LCommon;
 using LGame.LDebug;
 using UnityEngine;
 
-/****
- * 
- * 
- *  导入资源
- * 
- * 
- */
-
 namespace LGame.LSource
 {
 
-    public static class SLLoadSource
+    /****
+     * 
+     * 
+     *  立即导入资源
+     * 
+     *  同步加载资源
+     *  
+     *      同步从外部加载资源，同步加载到游戏中
+     * 
+     */
+
+    public static class SLImmedLoadSource
     {
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace LGame.LSource
         /// </summary>
         /// <param name="entity">加载资源数据的实体</param>
         /// <returns></returns>
-        public static LoadSourceEntity LoadAssetSource(LoadSourceEntity entity)
+        public static LoadSourceEntity ImmedLoadAssetSource(LoadSourceEntity entity)
         {
             entity = VerifySourceEntity(entity);
             if (entity == null) return null;
@@ -98,7 +101,7 @@ namespace LGame.LSource
         /// 得到资源的二进制数据
         /// </summary>
         /// <param name="entity">资源加载实体类</param>
-        public static LoadSourceEntity LoadTextSource(LoadSourceEntity entity)
+        public static LoadSourceEntity ImmedLoadTextSource(LoadSourceEntity entity)
         {
             entity = VerifySourceEntity(entity);
             if (entity == null) return null;
@@ -118,7 +121,7 @@ namespace LGame.LSource
         /// </summary>
         /// <param name="entity">资源加载实体类</param>
         /// <returns></returns>
-        public static LoadSourceEntity LoadResources(LoadSourceEntity entity)
+        public static LoadSourceEntity ImmedLoadResources(LoadSourceEntity entity)
         {
             entity = VerifySourceEntity(entity);
             if (entity == null) return null;
@@ -129,39 +132,6 @@ namespace LGame.LSource
             return entity;
         }
 
-        /// <summary>
-        /// 加载场景资源
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public static LoadSourceEntity LoadSceneSource(LoadSourceEntity entity)
-        {
-            entity = VerifySourceEntity(entity);
-            if (entity == null) return null;
-
-            string realPath = SLPathHelper.UnityLoadSourcePath() + entity.BundlePath;
-
-            byte[] bytes = SLManageSource.GetLoadFileBytes(realPath);
-            if (bytes == null)
-            {
-                SLDebugHelper.WriteError("获取文件的字节流数据为空! bytes = null");
-                return null;
-            }
-
-            AssetBundle bundle = AssetBundle.CreateFromMemoryImmediate(bytes);
-
-            if (bundle == null)
-            {
-                SLDebugHelper.WriteError("创建资源 AssetBundle 失败!");
-                return null;
-            }
-
-            entity.Bundle = bundle;
-            entity.LoadObj = null;
-            entity.Progress = 1;
-            entity.IsDone = true;
-            return entity;
-        }
     }
 
 }

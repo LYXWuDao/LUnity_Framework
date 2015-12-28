@@ -36,6 +36,47 @@ namespace LGame.LScenes
         private static Action LoadFinish = null;
 
         /// <summary>
+        /// 验证打开场景的参数
+        /// </summary>
+        /// <param name="sceneName">场景的名字</param>
+        /// <param name="scenePath">场景加载路径</param>
+        /// <param name="sceneScript">场景绑定的脚本</param>
+        /// <param name="finish">场景加载完成后回调</param>
+        /// <returns></returns>
+        private static bool VerifyScenesParams(string sceneName, string scenePath, string sceneScript, Action finish)
+        {
+            if (string.IsNullOrEmpty(sceneName))
+            {
+                SLDebugHelper.WriteError("打开的场景名字为空 sceneName = string.Empty");
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(scenePath))
+            {
+                SLDebugHelper.WriteError("场景加载路径为空， scenePath = string.Empty");
+                return false;
+            }
+
+            if (VerifyOpenScene(sceneName))
+            {
+                SLDebugHelper.WriteError("场景已经加载 sceneName = " + sceneName);
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(CurrentName))
+            {
+                // 当前已经打开一个场景
+                CLSceneBehaviour curr = Find<SLScenesManage>(CurrentName);
+                curr.OnLeaveScene();
+            }
+
+            CurrentName = sceneName;
+            CurrentScript = sceneScript;
+            LoadFinish = finish;
+            return true;
+        }
+
+        /// <summary>
         /// 场景加载完成时回调
         /// </summary>
         /// <param name="sceneName">加载的场景名字</param>
@@ -46,16 +87,6 @@ namespace LGame.LScenes
             {
                 SLDebugHelper.WriteError("打开的场景名字为空 sceneName = string.Empty");
                 return;
-            }
-
-            // 跳转场景
-            Application.LoadLevel(sceneName);
-
-            // 场景加载完成回调
-            if (LoadFinish != null)
-            {
-                LoadFinish();
-                LoadFinish = null;
             }
 
             GameObject root = GameObject.Find("SceneRoot");
@@ -80,12 +111,20 @@ namespace LGame.LScenes
                     scene = root.AddComponent(CurrentScript) as CLSceneBehaviour;
                 }
             }
+
             if (scene == null) scene = SLCompHelper.FindComponet<CLSceneBehaviour>(root);
 
             scene.OnEnterScene();
             Add<SLScenesManage>(sceneName, scene);
             CurrentScript = string.Empty;
             CurrentName = sceneName;
+
+            // 场景加载完成回调
+            if (LoadFinish != null)
+            {
+                LoadFinish();
+                LoadFinish = null;
+            }
         }
 
         /// <summary>
@@ -110,83 +149,15 @@ namespace LGame.LScenes
         }
 
         /// <summary>
-        /// 打开场景
-        /// </summary>
-        /// <param name="sceneName">场景的名字</param>
-        /// <param name="scenePath">场景的路径</param>
-        /// <param name="sceneScript">场景的脚本</param>
-        /// <param name="finish">场景加载完成</param>
-        public static void OpenToScenes(string sceneName, string scenePath, string sceneScript, Action finish)
-        {
-            if (string.IsNullOrEmpty(sceneName))
-            {
-                SLDebugHelper.WriteError("打开的场景名字为空 sceneName = string.Empty");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(scenePath))
-            {
-                SLDebugHelper.WriteError("场景加载路径为空， scenePath = string.Empty");
-                return;
-            }
-
-            if (VerifyOpenScene(sceneName))
-            {
-                SLDebugHelper.WriteError("场景已经加载 sceneName = ", sceneName);
-                return;
-            }
-
-            if (!string.IsNullOrEmpty(CurrentName))
-            {
-                // 当前已经打开一个场景
-                CLSceneBehaviour curr = Find<SLScenesManage>(CurrentName);
-                curr.OnLeaveScene();
-            }
-
-            CurrentName = sceneName;
-            CurrentScript = sceneScript;
-            LoadFinish = finish;
-            LoadSourceEntity entity = SLManageSource.LoadSceneAssetSource(sceneName, scenePath);
-            LoadSceneFinish(sceneName);
-        }
-
-        /// <summary>
         /// 异步加载场景
         /// </summary>
         /// <param name="sceneName">场景的名字</param>
         /// <param name="scenePath">场景的路径</param>
         /// <param name="sceneScript">场景的脚本</param>
-        /// <param name="finish">场景加载完成</param>
+        /// <param name="finish">场景加载完成回调</param>
         public static void AsyncOpenToScenes(string sceneName, string scenePath, string sceneScript, Action finish)
         {
-            if (string.IsNullOrEmpty(sceneName))
-            {
-                SLDebugHelper.WriteError("打开的场景名字为空 sceneName = string.Empty");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(scenePath))
-            {
-                SLDebugHelper.WriteError("场景加载路径为空， scenePath = string.Empty");
-                return;
-            }
-
-            if (VerifyOpenScene(sceneName))
-            {
-                SLDebugHelper.WriteError("场景已经加载 sceneName = ", sceneName);
-                return;
-            }
-
-            if (!string.IsNullOrEmpty(CurrentName))
-            {
-                // 当前已经打开一个场景
-                CLSceneBehaviour curr = Find<SLScenesManage>(CurrentName);
-                curr.OnLeaveScene();
-            }
-
-            CurrentName = sceneName;
-            CurrentScript = sceneScript;
-            LoadFinish = finish;
+            if (!VerifyScenesParams(sceneName, scenePath, sceneScript, finish)) return;
             SLManageSource.AsyncLoadSceneAssetSource(sceneName, scenePath, delegate(LoadSourceEntity entity)
             {
                 LoadSceneFinish(sceneName);

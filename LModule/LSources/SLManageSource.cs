@@ -35,9 +35,7 @@ namespace LGame.LSource
 
             Resource = 4,
 
-            SceneSource = 5,
-
-            AsyncSceneSource = 6,
+            AsyncSceneSource = 5,
         }
 
         /// <summary>
@@ -51,29 +49,30 @@ namespace LGame.LSource
         private static LoadSourceEntity LoadSource(string resName, string bundPath, LoadType ltype, LoadWay way, Action<LoadSourceEntity> finish = null)
         {
             LoadSourceEntity entity = null;
-            if (TryFind<SLManageSource>(resName, out entity)) return entity;
-            entity = new LoadSourceEntity { ResName = resName, BundlePath = bundPath, Type = ltype };
+            if (TryFind<SLManageSource>(resName, out entity))
+            {
+                if (entity.Finish != null) entity.Finish(entity);
+                return entity;
+            }
+            entity = new LoadSourceEntity { ResName = resName, BundlePath = bundPath, Type = ltype, Finish = finish };
             LoadSourceEntity load = null;
 
             switch (way)
             {
                 case LoadWay.SyncAsset:
-                    load = SLLoadSource.LoadAssetSource(entity);
+                    load = SLImmedLoadSource.ImmedLoadAssetSource(entity);
                     break;
                 case LoadWay.AsyncAsset:
-                    load = CLAsyncLoadSource.Instance.AsyncLoadAssetSource(entity, finish);
+                    load = CLAsyncLoadSource.Instance.AsyncLoadAssetSource(entity);
                     break;
                 case LoadWay.TextSource:
-                    load = SLLoadSource.LoadTextSource(entity);
+                    load = SLImmedLoadSource.ImmedLoadTextSource(entity);
                     break;
                 case LoadWay.Resource:
-                    load = SLLoadSource.LoadResources(entity);
-                    break;
-                case LoadWay.SceneSource:
-                    load = SLLoadSource.LoadSceneSource(entity);
+                    load = SLImmedLoadSource.ImmedLoadResources(entity);
                     break;
                 case LoadWay.AsyncSceneSource:
-                    load = CLAsyncLoadSource.Instance.AsyncLoadSceneAssetSource(entity, finish);
+                    load = CLAsyncLoadSource.Instance.AsyncLoadSceneAssetSource(entity);
                     break;
             }
 
@@ -156,15 +155,6 @@ namespace LGame.LSource
         public static LoadSourceEntity LoadResource(string resName, string bundPath, LoadType ltype)
         {
             return LoadSource(resName, bundPath, LoadType.TextContent, LoadWay.Resource);
-        }
-
-        /// <summary>
-        /// 导入场景资源
-        /// </summary>
-        /// <returns></returns>
-        public static LoadSourceEntity LoadSceneAssetSource(string resName, string bundPath)
-        {
-            return LoadSource(resName, bundPath, LoadType.Object, LoadWay.SceneSource, null);
         }
 
         /// <summary>

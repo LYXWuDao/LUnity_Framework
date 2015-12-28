@@ -13,7 +13,7 @@ namespace LGame.LSource
     /****
      * 
      * 
-     * 异步加载资源  
+     * 异步加载资源 (立即加载外部资源，异步加载到游戏中)
      * 
      * 使用文件流，二进制方式进行加载
      * 
@@ -39,7 +39,7 @@ namespace LGame.LSource
         /// <summary>
         /// 当前异步加载的数据
         /// </summary>
-        private AssetBundleCreateRequest AsyncAsset = null;
+        private AsyncOperation AsyncAsset = null;
 
         /// <summary>
         /// 当前加载的实体
@@ -51,7 +51,7 @@ namespace LGame.LSource
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        private AssetBundleCreateRequest CreateAssetRequest(LoadSourceEntity entity)
+        private AssetBundle CreateAssetBundle(LoadSourceEntity entity)
         {
             if (entity == null)
             {
@@ -90,52 +90,64 @@ namespace LGame.LSource
                 return null;
             }
 
-            return AssetBundle.CreateFromMemory(bytes);
+            AssetBundle bundle = AssetBundle.CreateFromMemoryImmediate(bytes);
+            if (bundle == null)
+            {
+                SLDebugHelper.WriteError("创建资源 AssetBundle 失败!");
+                Destroy();
+                return null;
+            }
+
+            return bundle;
         }
 
         /// <summary>
         /// 开始异步加载
+        /// 
+        /// 普通资源加载
         /// </summary>
-        /// <param name="bundleRequest">异步AssetBundle </param>
+        /// <param name="request">异步AssetBundle </param>
         /// <param name="entity">加载资源后实体</param>
-        /// <param name="callback">资源加载完成回调</param>
-        /// <param name="isLoad">是否根据资源名load资源</param>
         /// <returns></returns>
-        private IEnumerator StartLoad(AssetBundleCreateRequest bundleRequest, LoadSourceEntity entity,
-            Action<LoadSourceEntity> callback, bool isLoad = true)
+        private IEnumerator StartAssetLoad(AssetBundleRequest request, LoadSourceEntity entity)
         {
-            if (bundleRequest == null)
+            if (request == null)
             {
-                SLDebugHelper.WriteError("异步加载 AssetBundleCreateRequest 不存在!, bundleRequest = null");
+                SLDebugHelper.WriteError("异步加载 AssetBundleRequest 不存在!, request = null");
                 Destroy();
                 yield return 0;
             }
-            yield return bundleRequest;
-            AssetBundle assetBundle = bundleRequest.assetBundle;
-            if (assetBundle == null)
-            {
-                SLDebugHelper.WriteError("创建资源 AssetBundle 失败!");
-                Destroy();
-                yield return 0;
-            }
+            yield return request;
 
-            UnityEngine.Object retobj = null;
-            if (isLoad)
-            {
-                retobj = assetBundle.Load(entity.ResName);
-                if (retobj == null)
-                {
-                    SLDebugHelper.WriteError("资源 AssetBundle 中不存在 resName = " + entity.ResName);
-                    Destroy();
-                    yield return 0;
-                }
-            }
-
-            entity.LoadObj = retobj;
-            entity.Bundle = assetBundle;
+            entity.LoadObj = request.asset;
             entity.Progress = 1;
             entity.IsDone = true;
-            if (callback != null) callback(entity);
+            if (entity.Finish != null) entity.Finish(entity);
+            Destroy();
+        }
+
+        /// <summary>
+        /// 开始异步加载
+        /// 
+        /// 场景加载
+        /// </summary>
+        /// <param name="request">异步AssetBundle </param>
+        /// <param name="entity">加载资源后实体</param>
+        /// <returns></returns>
+        private IEnumerator StartSceneLoad(AsyncOperation request, LoadSourceEntity entity)
+        {
+            if (request == null)
+            {
+                SLDebugHelper.WriteError("异步加载 AsyncOperation 不存在!, request = null");
+                Destroy();
+                yield return 0;
+            }
+            yield return request;
+
+            entity.LoadObj = null;
+            entity.Progress = 1;
+            entity.IsDone = true;
+            if (entity.Finish != null) entity.Finish(entity);
             Destroy();
         }
 
@@ -147,6 +159,7 @@ namespace LGame.LSource
             get
             {
                 GameObject create = SLCompHelper.Create("_async load");
+                DontDestroyOnLoad(create);
                 return SLCompHelper.FindComponet<CLAsyncLoadSource>(create); ;
             }
         }
@@ -155,16 +168,27 @@ namespace LGame.LSource
         /// 加载 assetbundle 资源文件
         /// </summary>
         /// <param name="entity">加载资源后实体</param>
-        /// <param name="callback">加载完成后回调</param>
         /// <returns></returns>
-        public LoadSourceEntity AsyncLoadAssetSource(LoadSourceEntity entity, Action<LoadSourceEntity> callback)
+        public LoadSourceEntity AsyncLoadAssetSource(LoadSourceEntity entity)
         {
-            AssetBundleCreateRequest request = CreateAssetRequest(entity);
-            if (request == null) return null;
+            AssetBundle bundle = CreateAssetBundle(entity);
+            if (bundle == null) return null;
+            entity.Bundle = bundle;
             CurrentEntity = entity;
+
+            AssetBundleRequest request = bundle.LoadAsync(entity.ResName, typeof(UnityEngine.Object));
+
+            if (request == null)
+            {
+                SLDebugHelper.WriteError("创建异步加载资源失败！！");
+                Destroy();
+                return null;
+            }
+
             AsyncAsset = request;
+
             // 开始异步加载
-            StartCoroutine(StartLoad(request, entity, callback));
+            StartCoroutine(StartAssetLoad(request, entity));
             return entity;
         }
 
@@ -172,16 +196,26 @@ namespace LGame.LSource
         /// 导入场景资源
         /// </summary>
         /// <param name="entity"></param>
-        /// <param name="callback"></param>
         /// <returns></returns>
-        public LoadSourceEntity AsyncLoadSceneAssetSource(LoadSourceEntity entity, Action<LoadSourceEntity> callback)
+        public LoadSourceEntity AsyncLoadSceneAssetSource(LoadSourceEntity entity)
         {
-            AssetBundleCreateRequest request = CreateAssetRequest(entity);
-            if (request == null) return null;
+            AssetBundle bundle = CreateAssetBundle(entity);
+            if (bundle == null) return null;
+            entity.Bundle = bundle;
             CurrentEntity = entity;
+            AsyncOperation request = Application.LoadLevelAsync(entity.ResName);
+
+            if (request == null)
+            {
+                SLDebugHelper.WriteError("创建异步加载场景失败！！");
+                Destroy();
+                return null;
+            }
+
             AsyncAsset = request;
+
             // 开始异步加载
-            StartCoroutine(StartLoad(request, entity, callback, false));
+            StartCoroutine(StartSceneLoad(request, entity));
             return entity;
         }
 
