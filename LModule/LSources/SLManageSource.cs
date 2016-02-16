@@ -27,23 +27,39 @@ namespace LGame.LSource
         /// </summary>
         public enum LoadWay
         {
+
+            /// <summary>
+            /// 同步 AssetBundle资源
+            /// </summary>
             SyncAsset = 1,
 
+            /// <summary>
+            /// 异步AssetBundle资源
+            /// </summary>
             AsyncAsset = 2,
 
+            /// <summary>
+            /// 文本资源
+            /// </summary>
             TextSource = 3,
 
+            /// <summary>
+            /// 内部 Resources 资源
+            /// </summary>
             Resource = 4,
 
+            /// <summary>
+            /// 异步场景资源
+            /// </summary>
             AsyncSceneSource = 5,
         }
 
         /// <summary>
         /// 加载资源
         /// </summary>
-        /// <param name="resName"></param>
-        /// <param name="bundPath"></param>
-        /// <param name="ltype"></param>
+        /// <param name="resName">资源的名字(名字唯一)</param>
+        /// <param name="bundPath">加载 资源 AssetBundle 的路径</param>
+        /// <param name="ltype">资源的类型</param>
         /// <param name="way">加载资源的方式</param>
         /// <returns></returns>
         private static LoadSourceEntity LoadSource(string resName, string bundPath, LoadType ltype, LoadWay way, Action<LoadSourceEntity> finish = null)

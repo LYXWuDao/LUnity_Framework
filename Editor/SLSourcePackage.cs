@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using LGame.LBehaviour;
+﻿using System.IO;
 using LGame.LDebug;
 using UnityEditor;
 using UnityEngine;
-using System.Collections;
 
 namespace LGame.LEditor
 {
 
-    public class SLSourcePackage : ALBehaviour
+    public class SLSourcePackage
     {
 
         /// <summary>

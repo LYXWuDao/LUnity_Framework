@@ -267,10 +267,23 @@ namespace LGame.LUI
             if (topWin != null) topWin.OnLostFocus();
 
             _asyncScripts.Add(winName, winScript);
-            SLManageSource.AsyncLoadAssetSource(winName, winPath, LoadType.Object, delegate(LoadSourceEntity entity)
+            SLManageSource.AsyncLoadAssetSource(winName, winPath, LoadType.Object, delegate (LoadSourceEntity entity)
             {
                 AsyncOpenWindowCallback(winName, entity != null && entity.LoadObj != null ? entity.LoadObj as GameObject : null);
             });
+        }
+
+        /// <summary>
+        /// 查找界面
+        /// </summary>
+        /// <param name="winName">界面的名字</param>
+        /// <returns></returns>
+        public static CLUIBehaviour FindWindow(string winName)
+        {
+            if (string.IsNullOrEmpty(winName)) return null;
+            CLUIBehaviour win = null;
+            TryFind<SLUIManage>(winName, out win);
+            return win;
         }
 
         /// <summary>

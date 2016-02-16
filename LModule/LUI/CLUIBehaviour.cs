@@ -74,7 +74,14 @@ namespace LGame.LUI
             }
         }
 
-        private new void Awake()
+        /// <summary>
+        /// 子类不需要继承， 继承 OnAwake
+        /// 
+        /// 父类保留做操作
+        /// 
+        /// 如果继承 则需要先调用父类的 Awake 方法
+        /// </summary>
+        public override void Awake()
         {
             mPanels = SLCompHelper.GetComponents<UIPanel>(gameObject);
             mBoxColliders = SLCompHelper.GetComponents<Collider>(gameObject);
@@ -95,7 +102,14 @@ namespace LGame.LUI
             OnAwake();
         }
 
-        private new void Start()
+        /// <summary>
+        /// 子类不需要继承， 继承 OnStart
+        /// 
+        /// 父类保留做操作
+        /// 
+        /// 如果子类继承该函数，要先调用父类的 Start方法
+        /// </summary>
+        public override void Start()
         {
             OnStart();
         }
@@ -215,14 +229,14 @@ namespace LGame.LUI
         }
 
         /// <summary>
-        /// 子类继承，并实现 awake
+        /// 子类继承
         /// </summary>
         public virtual void OnAwake()
         {
         }
 
         /// <summary>
-        /// 子类继承，并实现 Start
+        /// 子类继承
         /// </summary>
         public virtual void OnStart()
         {

@@ -156,10 +156,10 @@ namespace LGame.LScenes
         /// <param name="scenePath">场景的路径</param>
         /// <param name="sceneScript">场景的脚本</param>
         /// <param name="finish">场景加载完成回调</param>
-        public static void AsyncOpenToScenes(string sceneName, string scenePath, string sceneScript, Action finish)
+        public static LoadSourceEntity AsyncOpenToScenes(string sceneName, string scenePath, string sceneScript, Action finish = null)
         {
-            if (!VerifyScenesParams(sceneName, scenePath, sceneScript, finish)) return;
-            SLManageSource.AsyncLoadSceneAssetSource(sceneName, scenePath, delegate(LoadSourceEntity entity)
+            if (!VerifyScenesParams(sceneName, scenePath, sceneScript, finish)) return null;
+            return SLManageSource.AsyncLoadSceneAssetSource(sceneName, scenePath, delegate (LoadSourceEntity entity)
             {
                 LoadSceneFinish(sceneName);
             });
