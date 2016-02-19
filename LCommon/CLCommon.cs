@@ -367,6 +367,16 @@ namespace LGame.LCommon
         public Vector3 tVector = Vector3.one;
 
         /// <summary>
+        /// 颜色改变值
+        /// </summary>
+        public Color fColor = Color.white;
+
+        /// <summary>
+        /// 颜色改变值
+        /// </summary>
+        public Color tColor = Color.black;
+
+        /// <summary>
         /// alpha 起始
         /// </summary>
         public float from = 0f;

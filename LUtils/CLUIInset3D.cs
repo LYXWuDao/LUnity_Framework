@@ -53,6 +53,11 @@ namespace LGame.LUtils
             transform.localPosition = transform.localPosition + mOffset;
         }
 
+        public override void OnClear()
+        {
+            mainCamera = null;
+            mTarget = null;
+        }
     }
 
 }

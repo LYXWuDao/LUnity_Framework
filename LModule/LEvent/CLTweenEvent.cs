@@ -24,11 +24,7 @@ namespace LGame.LEvent
         {
             get
             {
-                if (_tweenEvent == null)
-                {
-                    _tweenEvent = SLCompHelper.Create<CLTweenEvent>("_tween event");
-                    DontDestroyOnLoad(_tweenEvent);
-                }
+                if (_tweenEvent == null) BeginTweener();
                 return _tweenEvent;
             }
         }
@@ -38,10 +34,21 @@ namespace LGame.LEvent
         /// </summary>
         private float mTweenTime = 0;
 
+        private List<TweenerEntity> TweenerList;
+
         /// <summary>
-        /// 保存一个列表
+        /// 开始一个新的运动队列
+        /// 
+        /// 和原来以增加的队列的并行
+        /// 
+        /// 后面增加的运动, 默认添加到新的队列中
         /// </summary>
-        private List<TweenerEntity> TweenerList = new List<TweenerEntity>();
+        public static void BeginTweener()
+        {
+            _tweenEvent = SLCompHelper.Create<CLTweenEvent>("_tween event");
+            _tweenEvent.TweenerList = new List<TweenerEntity>();
+            DontDestroyOnLoad(_tweenEvent);
+        }
 
         /// <summary>
         /// 增加一个 透明运动
@@ -211,6 +218,48 @@ namespace LGame.LEvent
             });
         }
 
+        /// <summary>
+        /// 颜色改变
+        /// </summary>
+        /// <param name="go">运动的对象</param>
+        /// <param name="duration">运动的时间</param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        public static void BeginColor(GameObject go, float duration, Color from, Color to)
+        {
+            if (go == null) return;
+            Instance.TweenerList.Add(new TweenerEntity()
+            {
+                TweenType = TweenerType.Color,
+                Target = go,
+                fColor = from,
+                tColor = to,
+                Duration = duration,
+                IsImmediately = false
+            });
+        }
+
+        /// <summary>
+        /// 颜色改变
+        /// </summary>
+        /// <param name="go">运动的对象</param>
+        /// <param name="duration">运动的时间</param>
+        /// <param name="from">起始值</param>
+        /// <param name="to">目标值</param>
+        public static void BeginColorImmediate(GameObject go, float duration, Color from, Color to)
+        {
+            if (go == null) return;
+            Instance.TweenerList.Add(new TweenerEntity()
+            {
+                TweenType = TweenerType.Color,
+                Target = go,
+                fColor = from,
+                tColor = to,
+                Duration = duration,
+                IsImmediately = true
+            });
+        }
+
         public override void OnUpdate(float deltaTime)
         {
             if (TweenerList.Count <= 0 && mTweenTime <= 0)
@@ -263,10 +312,28 @@ namespace LGame.LEvent
                     rotation.method = UITweener.Method.EaseInOut;
                     tween = rotation;
                     break;
+                case TweenerType.Color:
+                    TweenColor color = TweenColor.Begin(entity.Target, entity.Duration, entity.fColor);
+                    color.from = entity.fColor;
+                    color.to = entity.tColor;
+                    color.method = UITweener.Method.EaseInOut;
+                    tween = color;
+                    break;
             }
             mTweenTime = entity.IsImmediately ? 0 : tween.duration;
             tween.PlayForward();
             TweenerList.RemoveAt(0);
+        }
+
+        /// <summary>
+        /// 清理当前数据
+        /// </summary>
+        public override void OnClear()
+        {
+            _tweenEvent = null;
+            if (TweenerList != null) TweenerList.Clear();
+            TweenerList = null;
+            mTweenTime = 0;
         }
     }
 

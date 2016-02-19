@@ -26,6 +26,12 @@ namespace LGame.LUI
         void OnStart();
 
         /// <summary>
+        /// 子类实现和调用
+        /// </summary>
+        /// <param name="deltaTime"></param>
+        void OnUpdate(float deltaTime);
+
+        /// <summary>
         /// 打开界面
         /// 
         /// 打开并创建界面
@@ -44,14 +50,7 @@ namespace LGame.LUI
         /// <param name="depth">界面深度</param>
         /// <param name="winName">界面的名字</param>
         void OnOpen(int depth, string winName);
-
-        /// <summary>
-        /// 关闭界面
-        /// 
-        /// 关闭并销毁该界面
-        /// </summary>
-        void OnClose();
-
+        
         /// <summary>
         /// 刷新面板
         /// </summary>
@@ -88,6 +87,11 @@ namespace LGame.LUI
         void OnRelease();
 
         /// <summary>
+        /// 长按
+        /// </summary>
+        void OnLongPress();
+
+        /// <summary>
         /// 显示
         /// </summary>
         void OnShow();
@@ -97,6 +101,17 @@ namespace LGame.LUI
         /// </summary>
         void OnHide();
 
+        /// <summary>
+        /// 关闭界面
+        /// 
+        /// 关闭并销毁该界面
+        /// </summary>
+        void OnClose();
+
+        /// <summary>
+        /// 清理界面数据
+        /// </summary>
+        void OnClear();
     }
 
 }

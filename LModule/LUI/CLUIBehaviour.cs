@@ -41,6 +41,29 @@ namespace LGame.LUI
         private UIEventTrigger[] mEventTrigger;
 
         /// <summary>
+        /// 当前长按的对象
+        /// 
+        /// 以按下为准
+        /// </summary>
+        [NonSerialized]
+        private Collider mCurrLoopColliders = null;
+
+        /// <summary>
+        /// 按下一定时间后,才算长按
+        /// </summary>
+        private float mLoopTime = 0.3f;
+
+        /// <summary>
+        /// 点击间隔时间
+        /// </summary>
+        private float mClickDelayTime = 0f;
+
+        /// <summary>
+        /// 按下的间隔时间
+        /// </summary>
+        private float mPressDelayTime = 0f;
+
+        /// <summary>
         /// 界面 ui
         /// </summary>
         [NonSerialized]
@@ -83,6 +106,10 @@ namespace LGame.LUI
         /// </summary>
         public override void Awake()
         {
+            mCurrLoopColliders = null;
+            mLoopTime = 0.3f;
+            mClickDelayTime = 0f;
+
             mPanels = SLCompHelper.GetComponents<UIPanel>(gameObject);
             mBoxColliders = SLCompHelper.GetComponents<Collider>(gameObject);
             mEventTrigger = SLCompHelper.GetComponents<UIEventTrigger>(gameObject);
@@ -112,6 +139,26 @@ namespace LGame.LUI
         public override void Start()
         {
             OnStart();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deltaTime"></param>
+        public override void Update()
+        {
+            float dltTime = Time.deltaTime;
+
+            if (mCurrLoopColliders != null)
+            {
+                if (mLoopTime <= 0) OnLongPress();
+                mLoopTime -= dltTime;
+            }
+
+            if (mClickDelayTime > 0) mClickDelayTime -= dltTime;
+            if (mPressDelayTime > 0) mPressDelayTime -= dltTime;
+
+            OnUpdate(dltTime);
         }
 
         /// <summary>
@@ -172,6 +219,8 @@ namespace LGame.LUI
         /// </summary>
         public void OnClick()
         {
+            if (mClickDelayTime > 0) return;
+            mClickDelayTime = 0.2f;
             Collider click = UICamera.lastHit.collider;
             if (click == null) return;
             OnCollider(click.gameObject);
@@ -197,8 +246,12 @@ namespace LGame.LUI
         /// </summary>
         public void OnPress()
         {
+            if (mPressDelayTime > 0) return;
+            mPressDelayTime = 0.2f;
             Collider press = UICamera.lastHit.collider;
             if (press == null) return;
+            mCurrLoopColliders = press;
+            mLoopTime = 0.3f;
             OnPressCollider(press.gameObject);
         }
 
@@ -209,7 +262,18 @@ namespace LGame.LUI
         {
             Collider release = UICamera.lastHit.collider;
             if (release == null) return;
+            mCurrLoopColliders = null;
+            mLoopTime = 0.3f;
             OnReleaseCollider(release.gameObject);
+        }
+
+        /// <summary>
+        /// 鼠标响应长按
+        /// </summary>
+        public void OnLongPress()
+        {
+            if (mCurrLoopColliders == null) return;
+            OnLoopPressCollider(mCurrLoopColliders.gameObject);
         }
 
         /// <summary>
@@ -229,6 +293,23 @@ namespace LGame.LUI
         }
 
         /// <summary>
+        /// 关闭界面
+        /// 
+        /// 关闭并销毁该界面
+        /// 
+        /// 如果该类被重写，需要调用base该方法
+        /// </summary>
+        public void OnClose()
+        {
+            mPanels = null;
+            mBoxColliders = null;
+            mEventTrigger = null;
+            mCurrLoopColliders = null;
+            mLoopTime = 0.3f;
+            SLUIManage.CloseWindow(this);
+        }
+
+        /// <summary>
         /// 子类继承
         /// </summary>
         public virtual void OnAwake()
@@ -240,6 +321,11 @@ namespace LGame.LUI
         /// </summary>
         public virtual void OnStart()
         {
+        }
+
+        public virtual new void OnUpdate(float deltaTime)
+        {
+
         }
 
         /// <summary>
@@ -295,32 +381,26 @@ namespace LGame.LUI
         }
 
         /// <summary>
+        /// 长按鼠标
+        /// 
+        /// 子类继承该函数
+        /// </summary>
+        /// <param name="btn">按下的 Collider</param>
+        public virtual void OnLoopPressCollider(GameObject btn)
+        {
+
+        }
+
+        /// <summary>
         /// 清理界面数据
         /// 
         /// 界面关闭时清理数据
-        /// 
         /// </summary>
         public virtual new void OnClear()
         {
 
         }
 
-        /// <summary>
-        /// 关闭界面
-        /// 
-        /// 关闭并销毁该界面
-        /// 
-        /// 如果该类被重写，需要调用base该方法
-        /// </summary>
-        public void OnClose()
-        {
-            mPanels = null;
-            mBoxColliders = null;
-            mEventTrigger = null;
-            SLUIManage.CloseWindow(this);
-        }
-
     }
-
 }
 

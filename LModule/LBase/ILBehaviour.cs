@@ -8,6 +8,8 @@ namespace LGame.LBehaviour
     /****
      * 
      * 框架基础行为接口
+     *
+     * 框架行为的生命周期
      * 
      */
 
@@ -28,6 +30,9 @@ namespace LGame.LBehaviour
         /// </summary>
         void OnEnable();
 
+        /// <summary>
+        /// unity 自动调用
+        /// </summary>
         void FixedUpdate();
 
         void OnFixedUpdate(float fixedTime);
@@ -74,6 +79,8 @@ namespace LGame.LBehaviour
 
         /// <summary>
         /// 主动调用销毁
+        /// 
+        /// 框架使用或者继承框架者调用
         /// </summary>
         void Destroy();
 

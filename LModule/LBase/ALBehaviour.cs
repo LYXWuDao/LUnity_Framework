@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace LGame.LBehaviour
 {
@@ -28,8 +29,9 @@ namespace LGame.LBehaviour
             OnFixedUpdate(Time.deltaTime);
         }
 
-        public virtual void OnFixedUpdate(float fixedTime)
+        public void OnFixedUpdate(float fixedTime)
         {
+
         }
 
         public virtual void Start()
@@ -43,6 +45,7 @@ namespace LGame.LBehaviour
 
         public virtual void OnUpdate(float deltaTime)
         {
+
         }
 
         public virtual void LateUpdate()
@@ -50,8 +53,9 @@ namespace LGame.LBehaviour
             OnLateUpdate(Time.deltaTime);
         }
 
-        public virtual void OnLateUpdate(float deltaTime)
+        public void OnLateUpdate(float deltaTime)
         {
+
         }
 
         public virtual void OnGUI()
@@ -66,16 +70,27 @@ namespace LGame.LBehaviour
         {
         }
 
+        /// <summary>
+        /// 响应自己的销毁
+        /// </summary>
         public virtual void OnClear()
         {
 
         }
 
+        /// <summary>
+        /// 手动调用销毁自己
+        /// </summary>
         public virtual void Destroy()
         {
             GameObject.Destroy(gameObject);
         }
 
+        /// <summary>
+        /// unity 响应销毁
+        /// 
+        /// 并在自己销毁时调用清理函数
+        /// </summary>
         public virtual void OnDestroy()
         {
             OnClear();
@@ -85,6 +100,7 @@ namespace LGame.LBehaviour
         {
 
         }
+
     }
 
 }

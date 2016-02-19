@@ -46,5 +46,10 @@ namespace LGame.LUtils
             Destroy();
         }
 
+        public override void OnClear()
+        {
+            mDtyTime = 0;
+        }
+
     }
 }

@@ -38,19 +38,6 @@ namespace LGame.LUtils
         /// </summary>
         private float mActionTime = 0;
 
-        public override void OnUpdate(float deltaTime)
-        {
-            if (mActionBack == null) return;
-            if (mActionTime > 0)
-            {
-                mActionTime -= deltaTime;
-                return;
-            }
-            mActionBack();
-            mActionBack = null;
-            RemoveAction();
-        }
-
         /// <summary>
         /// 间隔多久后回调
         /// </summary>
@@ -71,12 +58,31 @@ namespace LGame.LUtils
             return delact;
         }
 
+        public override void OnUpdate(float deltaTime)
+        {
+            if (mActionBack == null) return;
+            if (mActionTime > 0)
+            {
+                mActionTime -= deltaTime;
+                return;
+            }
+            mActionBack();
+            mActionBack = null;
+            RemoveAction();
+        }
+
         /// <summary>
         /// 移出当前脚本
         /// </summary>
         public void RemoveAction()
         {
             Destroy();
+        }
+
+        public override void OnClear()
+        {
+            mActionBack = null;
+            mActionTime = 0;
         }
 
     }
