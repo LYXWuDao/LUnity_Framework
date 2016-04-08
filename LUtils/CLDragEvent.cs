@@ -36,7 +36,7 @@ namespace LGame.LUtils
         /// <summary>
         /// 鼠标按下
         /// </summary>
-        protected override void OnMouseLeftDown()
+        public override void OnMouseLeftDown()
         {
             MouseMove(MouseRayTransform);
         }
@@ -44,7 +44,7 @@ namespace LGame.LUtils
         /// <summary>
         /// 鼠标抬起
         /// </summary>
-        protected override void OnMouseLeftUp()
+        public override void OnMouseLeftUp()
         {
 
         }

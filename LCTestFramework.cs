@@ -16,14 +16,8 @@ using UnityEngine;
 public class LCTestFramework : ALBehaviour
 {
 
-    public override void Awake()
+    protected override void Awake()
     {
-
-        Dictionary<string, string> dic = new Dictionary<string, string>();
-
-        string value;
-        dic.TryGetValue(string.Empty, out value);
-        SLDebugHelper.Write(value);
 
     }
 

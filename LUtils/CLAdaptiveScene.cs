@@ -56,12 +56,12 @@ namespace LGame.LUtils
         /// </summary>
         public float mOriginalHeight;
 
-        public override void Awake()
+        protected override void Awake()
         {
             transform.localScale = Vector3.one;
             anchorWidget = gameObject.GetComponent<UIWidget>();
             bool isWidget = anchorWidget != null;
-            Vector2 vect = SLCompHelper.SceneWidthAndHeight();
+            Vector2 vect = SLToolsHelper.SceneWidthAndHeight();
             mSceneWidth = (int)vect.x;
             mSceneHeight = (int)vect.y;
             if (isWidget)
@@ -79,21 +79,21 @@ namespace LGame.LUtils
             }
         }
 
-        public override void OnEnable()
+        protected override void OnEnable()
         {
             if (anchorUpdate == LYXAnchorUpdate.OnEnable) AdaptiveScene();
         }
 
-        public override void Start()
+        protected override void Start()
         {
             if (anchorUpdate == LYXAnchorUpdate.OnStart) AdaptiveScene();
         }
 
-        public override void Update()
+        protected override void Update()
         {
             if (anchorUpdate == LYXAnchorUpdate.OnUpdate)
             {
-                Vector2 vect = SLCompHelper.SceneWidthAndHeight();
+                Vector2 vect = SLToolsHelper.SceneWidthAndHeight();
                 mSceneWidth = (int)vect.x;
                 mSceneHeight = (int)vect.y;
                 AdaptiveScene();

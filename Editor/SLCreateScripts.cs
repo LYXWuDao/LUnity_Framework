@@ -46,7 +46,7 @@ namespace LGame.LEditor
         {
             string folderPath = CreateScriptFolder();
             if (string.IsNullOrEmpty(folderPath)) return;
-            SLDebugHelper.WriteError(folderPath);
+            SLConsole.WriteError(folderPath);
 
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
                 ScriptableObject.CreateInstance<CreateLuaScriptAction>(),
@@ -84,7 +84,7 @@ namespace LGame.LEditor
         {
             string fullPath = Path.GetFullPath(pathName);
             string fileName = Path.GetFileNameWithoutExtension(fullPath);
-            SLDebugHelper.WriteError(fileName);
+            SLConsole.WriteError(fileName);
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("--region cretate new lua File");
             builder.AppendLine(string.Format("--Lua FileName {0}", fileName));

@@ -10,7 +10,7 @@ namespace LGame.LUtils
     /******
      * 
      * 
-     * 间隔多少时间
+     * 间隔多少时间，做其他的事情
      * 
      */
 
@@ -23,8 +23,8 @@ namespace LGame.LUtils
         {
             get
             {
-                GameObject go = SLCompHelper.Create("_delay action");
-                return SLCompHelper.FindComponet<CLDelayAction>(go);
+                GameObject go = SLToolsHelper.Create("_delay action");
+                return SLToolsHelper.FindComponet<CLDelayAction>(go);
             }
         }
 
@@ -58,7 +58,7 @@ namespace LGame.LUtils
             return delact;
         }
 
-        public override void OnUpdate(float deltaTime)
+        protected override void OnUpdate(float deltaTime)
         {
             if (mActionBack == null) return;
             if (mActionTime > 0)
@@ -79,7 +79,7 @@ namespace LGame.LUtils
             Destroy();
         }
 
-        public override void OnClear()
+        protected override void OnClear()
         {
             mActionBack = null;
             mActionTime = 0;

@@ -36,13 +36,13 @@ namespace LGame.LUtils
         [System.NonSerialized]
         private Vector3 mSaveTagPos;
 
-        public override void Start()
+        protected override void Start()
         {
             if (mainCamera == null) mainCamera = Camera.main;
             mSaveTagPos = Vector3.one * -1000;
         }
 
-        public override void OnUpdate(float deltaTime)
+        protected override void OnUpdate(float deltaTime)
         {
             if (mTarget == null) return;
             Vector3 tpos = mTarget.transform.position;
@@ -53,7 +53,7 @@ namespace LGame.LUtils
             transform.localPosition = transform.localPosition + mOffset;
         }
 
-        public override void OnClear()
+        protected override void OnClear()
         {
             mainCamera = null;
             mTarget = null;
