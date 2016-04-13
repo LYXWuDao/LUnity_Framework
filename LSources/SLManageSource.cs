@@ -19,8 +19,11 @@ namespace LGame.LSource
      * 
      */
 
-    public sealed class SLManageSource : CLTypeDicData<SLManageSource, string, LoadSourceEntity>
+    public sealed class SLManageSource
     {
+
+        private static CLBaseDicData<string, LoadSourceEntity> _sourceManage = new CLBaseDicData<string, LoadSourceEntity>();
+
         /// <summary>
         /// 加载资源
         /// </summary>
@@ -32,7 +35,7 @@ namespace LGame.LSource
         private static LoadSourceEntity LoadSource(string resName, string bundPath, LoadType ltype, LoadWay way, Action<LoadSourceEntity> finish = null)
         {
             LoadSourceEntity entity = null;
-            if (TryFind(resName, out entity))
+            if (_sourceManage.TryFind(resName, out entity))
             {
                 if (entity.Finish != null) entity.Finish(entity);
                 return entity;
@@ -66,7 +69,7 @@ namespace LGame.LSource
                 entity.IsDone = true;
             }
 
-            Add(resName, entity);
+            _sourceManage.Add(resName, entity);
             return entity;
         }
 
@@ -165,13 +168,13 @@ namespace LGame.LSource
                 return true;
             }
             LoadSourceEntity entity;
-            if (!TryFind(resName, out entity))
+            if (!_sourceManage.TryFind(resName, out entity))
             {
                 SLConsole.WriteError("移出的资源不存在！,resName = " + resName);
                 return true;
             }
             SLUnloadSource.UnLoadSource(entity.Bundle);
-            Remove(resName);
+            _sourceManage.Remove(resName);
             return true;
         }
 
@@ -181,9 +184,9 @@ namespace LGame.LSource
         /// <returns></returns>
         public static void RemoveAllSource()
         {
-            foreach (LoadSourceEntity entity in FindAllValues())
+            foreach (LoadSourceEntity entity in _sourceManage.FindAllValues())
                 SLUnloadSource.UnLoadSource(entity.Bundle);
-            RemoveAll();
+            _sourceManage.RemoveAll();
         }
     }
 

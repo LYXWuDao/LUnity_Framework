@@ -16,8 +16,10 @@ namespace LGame.LScenes
      * 
      */
 
-    public class SLScenesManage : CLTypeDicData<SLScenesManage, string, CLSceneBehaviour>
+    public class SLScenesManage
     {
+
+        private static CLBaseDicData<string, CLSceneBehaviour> _sceneDataManage = new CLBaseDicData<string, CLSceneBehaviour>();
 
         /// <summary>
         /// 当前场景的名字
@@ -40,9 +42,9 @@ namespace LGame.LScenes
             if (!string.IsNullOrEmpty(CurrentName))
             {
                 // 当前已经打开一个场景
-                CLSceneBehaviour curr = Find(CurrentName);
+                CLSceneBehaviour curr = _sceneDataManage.Find(CurrentName);
                 curr.LeaveScene();
-                Remove(CurrentName);
+                _sceneDataManage.Remove(CurrentName);
             }
 
             CurrentName = sceneName;
@@ -79,7 +81,7 @@ namespace LGame.LScenes
             if (scene == null) scene = SLToolsHelper.FindComponet<CLSceneBehaviour>(root);
 
             scene.EnterScene();
-            Add(sceneName, scene);
+            _sceneDataManage.Add(sceneName, scene);
 
             // 场景加载完成回调
             if (finish != null)
@@ -106,7 +108,7 @@ namespace LGame.LScenes
             get
             {
                 if (string.IsNullOrEmpty(CurrentName)) return null;
-                return Find(CurrentName);
+                return _sceneDataManage.Find(CurrentName);
             }
         }
 

@@ -20,12 +20,12 @@ namespace LGame.LCommon
         /// <summary>
         /// 保存数据
         /// </summary>
-        private static Dictionary<Type, CLBaseDicData<TKey, TValue>> _typeDicData = new Dictionary<Type, CLBaseDicData<TKey, TValue>>();
+        private Dictionary<Type, CLBaseDicData<TKey, TValue>> _typeDicData = new Dictionary<Type, CLBaseDicData<TKey, TValue>>();
 
         /// <summary>
         /// 保存的类型类型
         /// </summary>
-        public static Type TypeKey
+        public Type TypeKey
         {
             get
             {
@@ -36,7 +36,7 @@ namespace LGame.LCommon
         /// <summary>
         /// 数据长度
         /// </summary>
-        public static int Length
+        public int Length
         {
             get
             {
@@ -48,16 +48,18 @@ namespace LGame.LCommon
         /// <summary>
         ///  返回最后一个数据
         /// </summary>
-        public static TValue TopData
+        public TValue TopData
         {
             get
             {
+                if (!_typeDicData.ContainsKey(TypeKey)) return default(TValue);
                 CLBaseDicData<TKey, TValue> dicData = _typeDicData[TypeKey];
+                if (dicData == null) return default(TValue);
                 return dicData.TopData;
             }
         }
 
-        public static void Add(TKey key, TValue value)
+        public void Add(TKey key, TValue value)
         {
             CLBaseDicData<TKey, TValue> dicData;
             if (!_typeDicData.TryGetValue(TypeKey, out dicData)) dicData = new CLBaseDicData<TKey, TValue>();
@@ -71,7 +73,7 @@ namespace LGame.LCommon
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value">新的值</param>
-        public static void Modify(TKey key, TValue value)
+        public void Modify(TKey key, TValue value)
         {
             CLBaseDicData<TKey, TValue> dicData;
             if (!_typeDicData.TryGetValue(TypeKey, out dicData)) return;
@@ -83,7 +85,7 @@ namespace LGame.LCommon
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static bool Contains(TKey key)
+        public bool Contains(TKey key)
         {
             CLBaseDicData<TKey, TValue> dicData;
             if (!_typeDicData.TryGetValue(TypeKey, out dicData)) return false;
@@ -95,7 +97,7 @@ namespace LGame.LCommon
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static TValue Find(TKey key)
+        public TValue Find(TKey key)
         {
             CLBaseDicData<TKey, TValue> dicData;
             if (!_typeDicData.TryGetValue(TypeKey, out dicData)) return default(TValue);
@@ -110,7 +112,7 @@ namespace LGame.LCommon
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool TryFind(TKey key, out TValue value)
+        public bool TryFind(TKey key, out TValue value)
         {
             value = default(TValue);
             CLBaseDicData<TKey, TValue> dicData;
@@ -118,14 +120,14 @@ namespace LGame.LCommon
             return dicData.TryFind(key, out value);
         }
 
-        public static List<TValue> FindAllValues()
+        public List<TValue> FindAllValues()
         {
             CLBaseDicData<TKey, TValue> dicData;
             if (!_typeDicData.TryGetValue(TypeKey, out dicData)) return null;
             return dicData.FindAllValues();
         }
 
-        public static List<TKey> FindAllKeys()
+        public List<TKey> FindAllKeys()
         {
             CLBaseDicData<TKey, TValue> dicData;
             if (!_typeDicData.TryGetValue(TypeKey, out dicData)) return null;
@@ -137,7 +139,7 @@ namespace LGame.LCommon
         /// </summary>
         /// <param name="index">值下标，从零开始</param>
         /// <returns>找到的值</returns>
-        public static TValue FindValue(int index)
+        public TValue FindValue(int index)
         {
             CLBaseDicData<TKey, TValue> dicData;
             if (!_typeDicData.TryGetValue(TypeKey, out dicData)) return default(TValue);
@@ -149,7 +151,7 @@ namespace LGame.LCommon
         /// </summary>
         /// <param name="value"></param>
         /// <returns> -1 表示没找到 </returns>
-        public static int ValueIndexOf(TValue value)
+        public int ValueIndexOf(TValue value)
         {
             CLBaseDicData<TKey, TValue> dicData;
             if (!_typeDicData.TryGetValue(TypeKey, out dicData)) return -1;
@@ -161,7 +163,7 @@ namespace LGame.LCommon
         /// </summary>
         /// <param name="index">值下标，从零开始</param>
         /// <returns>找到的key值</returns>
-        public static TKey FindKey(int index)
+        public TKey FindKey(int index)
         {
             CLBaseDicData<TKey, TValue> dicData;
             if (!_typeDicData.TryGetValue(TypeKey, out dicData)) return default(TKey);
@@ -173,7 +175,7 @@ namespace LGame.LCommon
         /// </summary>
         /// <param name="key"></param>
         /// <returns>-1表示没找到</returns>
-        public static int KeyIndexOf(TKey key)
+        public int KeyIndexOf(TKey key)
         {
             CLBaseDicData<TKey, TValue> dicData;
             if (!_typeDicData.TryGetValue(TypeKey, out dicData)) return -1;
@@ -185,7 +187,7 @@ namespace LGame.LCommon
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static bool Remove(TKey key)
+        public bool Remove(TKey key)
         {
             CLBaseDicData<TKey, TValue> dicData;
             if (!_typeDicData.TryGetValue(TypeKey, out dicData)) return false;
@@ -196,7 +198,7 @@ namespace LGame.LCommon
         ///  移出所有的数据
         /// </summary>
         /// <returns></returns>
-        public static bool RemoveAll()
+        public bool RemoveAll()
         {
             if (!_typeDicData.ContainsKey(TypeKey)) return false;
             return _typeDicData.Remove(TypeKey);

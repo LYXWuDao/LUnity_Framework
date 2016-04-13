@@ -15,7 +15,7 @@ namespace LGame.LUI
      *   界面操作入口
      *  
      */
-    public sealed class SLUIManage : CLTypeDicData<SLUIManage, string, CLUIBehaviour>
+    public sealed class SLUIManage
     {
         /// <summary>
         /// 私有话 
@@ -23,6 +23,11 @@ namespace LGame.LUI
         /// 不允许实例化
         /// </summary>
         private SLUIManage() { }
+
+        /// <summary>
+        /// 保存 ui 信息数据
+        /// </summary>
+        private static CLBaseDicData<string, CLUIBehaviour> _uiDataManage = new CLBaseDicData<string, CLUIBehaviour>();
 
         /// <summary>
         /// 保存异步打开的界面信息
@@ -141,7 +146,7 @@ namespace LGame.LUI
             // 初始化当前界面
             win.OnOpen(depth, winName);
             win.OnFocus();
-            Add(winName, win);
+            _uiDataManage.Add(winName, win);
         }
 
         /// <summary>
@@ -184,7 +189,7 @@ namespace LGame.LUI
         /// <returns></returns>
         public static CLUIBehaviour TopWindow()
         {
-            return TopData;
+            return _uiDataManage.TopData;
         }
 
         /// <summary>
@@ -229,7 +234,7 @@ namespace LGame.LUI
             }
 
             CLUIBehaviour win = null;
-            if (TryFind(winName, out win)) return;
+            if (_uiDataManage.TryFind(winName, out win)) return;
 
             int depth = 1;
             // 当前最高的界面失去焦点
@@ -249,7 +254,7 @@ namespace LGame.LUI
             // 初始化当前界面
             win.OnOpen(depth, winName);
             win.OnFocus();
-            Add(winName, win);
+            _uiDataManage.Add(winName, win);
         }
 
         /// <summary>
@@ -274,7 +279,7 @@ namespace LGame.LUI
             }
 
             CLUIBehaviour win = null;
-            if (TryFind(winName, out win)) return;
+            if (_uiDataManage.TryFind(winName, out win)) return;
 
             // 当前最高的界面失去焦点
             CLUIBehaviour topWin = TopWindow();
@@ -297,7 +302,7 @@ namespace LGame.LUI
         {
             if (string.IsNullOrEmpty(winName)) return null;
             CLUIBehaviour win = null;
-            TryFind(winName, out win);
+            _uiDataManage.TryFind(winName, out win);
             return win;
         }
 
@@ -310,7 +315,7 @@ namespace LGame.LUI
             if (!TryTopWindow(out win)) return;
             win.OnLostFocus();
             win.Destroy();
-            Remove(win.WinName);
+            _uiDataManage.Remove(win.WinName);
         }
 
         /// <summary>
@@ -319,7 +324,7 @@ namespace LGame.LUI
         public static void CloseWindow(string winName)
         {
             CLUIBehaviour win = null;
-            if (!TryFind(winName, out win)) return;
+            if (!_uiDataManage.TryFind(winName, out win)) return;
             CloseWindow(win);
         }
 
@@ -332,7 +337,7 @@ namespace LGame.LUI
             if (win == null) return;
             win.OnLostFocus();
             win.Destroy();
-            Remove(win.WinName);
+            _uiDataManage.Remove(win.WinName);
             CLUIBehaviour topWin = null;
             if (!TryTopWindow(out topWin)) return;
             topWin.OnFocus();
@@ -343,7 +348,7 @@ namespace LGame.LUI
         /// </summary>
         public static void CloseAllWindow()
         {
-            List<string> win = FindAllKeys();
+            List<string> win = _uiDataManage.FindAllKeys();
             if (win == null) return;
             for (int i = 0, len = win.Count; i < len; i++) CloseWindow(win[i]);
         }
@@ -361,14 +366,14 @@ namespace LGame.LUI
         {
             if (string.IsNullOrEmpty(winName))
             {
-                List<CLUIBehaviour> win = FindAllValues();
+                List<CLUIBehaviour> win = _uiDataManage.FindAllValues();
                 if (win == null) return;
                 for (int i = 0, len = win.Count; i < len; i++) win[i].OnRefresh();
             }
             else
             {
                 CLUIBehaviour win = null;
-                if (!TryFind(winName, out win)) return;
+                if (!_uiDataManage.TryFind(winName, out win)) return;
                 win.OnRefresh();
             }
         }
