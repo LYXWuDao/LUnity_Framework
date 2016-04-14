@@ -34,7 +34,10 @@ namespace LGame.LBehaviour
         /// <summary>
         /// unity 自动调用
         /// </summary>
-        protected virtual void FixedUpdate() { }
+        protected virtual void FixedUpdate()
+        {
+            OnFixedUpdate(Time.deltaTime);
+        }
 
         protected virtual void OnFixedUpdate(float fixedTime) { }
 
@@ -46,11 +49,17 @@ namespace LGame.LBehaviour
         /// <summary>
         /// 每一帧调用
         /// </summary>
-        protected virtual void Update() { }
+        protected virtual void Update()
+        {
+            OnUpdate(Time.deltaTime);
+        }
 
         protected virtual void OnUpdate(float deltaTime) { }
 
-        protected virtual void LateUpdate() { }
+        protected virtual void LateUpdate()
+        {
+            OnLateUpdate(Time.deltaTime);
+        }
 
         protected virtual void OnLateUpdate(float deltaTime) { }
 

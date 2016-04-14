@@ -97,8 +97,9 @@ namespace LGame.LUtils
                 return;
             }
 
-            UITweener tween = TweenerList[0];
-            if (tween == null) return;
+            TweenerEntity entity = TweenerList[0];
+            UITweener tween = BeginTweener(entity);
+            if (entity == null || tween == null) return;
 
             tween.PlayForward();
             TweenerList.RemoveAt(0);

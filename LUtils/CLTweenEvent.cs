@@ -29,14 +29,15 @@ namespace LGame.LUtils
         /// <summary>
         /// 当前 Tweener 的数据
         /// </summary>
-        protected List<UITweener> TweenerList = new List<UITweener>();
+        protected List<TweenerEntity> TweenerList = new List<TweenerEntity>();
 
-        private static CLTweenEvent CreateTween(Type tweenType)
+        private static CLTweenEvent CreateTween<T>() where T : CLTweenEvent
         {
+            Type tweenType = typeof(T);
             CLTweenEvent tween;
             if (_tweenData.TryFind(tweenType, out tween)) return tween;
 
-            tween = SLToolsHelper.Create<CLTweenEvent>("_tween event");
+            tween = SLToolsHelper.Create<T>("_tween event");
             DontDestroyOnLoad(tween);
 
             _tweenData.Add(tweenType, tween);
@@ -51,19 +52,22 @@ namespace LGame.LUtils
         /// <param name="duration">运动的时间</param>
         /// <param name="from">起始值</param>
         /// <param name="to">目标值</param>
-        public static void BeginAlpha<T>(GameObject go, float duration, float from, float to)
+        public static void BeginAlpha<T>(GameObject go, float duration, float from, float to) where T : CLTweenEvent
         {
             if (go == null) return;
 
-            CLTweenEvent tween = CreateTween(typeof(T));
+            CLTweenEvent tween = CreateTween<T>();
             if (tween == null) return;
 
-            TweenAlpha alpha = TweenAlpha.Begin(go, duration, to);
-            alpha.from = from;
-            alpha.to = to;
-            alpha.method = UITweener.Method.EaseInOut;
+            tween.TweenerList.Add(new TweenerEntity()
+            {
+                TweenType = TweenerType.Alpha,
+                Target = go,
+                from = from,
+                to = to,
+                Duration = duration
+            });
 
-            tween.TweenerList.Add(alpha);
         }
 
         /// <summary>
@@ -73,19 +77,21 @@ namespace LGame.LUtils
         /// <param name="duration">运动的时间</param>
         /// <param name="from">起始值</param>
         /// <param name="to">目标值</param>
-        public static void BeginPosition<T>(GameObject go, float duration, Vector3 from, Vector3 to)
+        public static void BeginPosition<T>(GameObject go, float duration, Vector3 from, Vector3 to) where T : CLTweenEvent
         {
             if (go == null) return;
 
-            CLTweenEvent tween = CreateTween(typeof(T));
+            CLTweenEvent tween = CreateTween<T>();
             if (tween == null) return;
 
-            TweenPosition position = TweenPosition.Begin(go, duration, to);
-            position.from = from;
-            position.to = to;
-            position.method = UITweener.Method.EaseInOut;
-
-            tween.TweenerList.Add(position);
+            tween.TweenerList.Add(new TweenerEntity()
+            {
+                TweenType = TweenerType.Position,
+                Target = go,
+                fVector = from,
+                tVector = to,
+                Duration = duration
+            });
         }
 
         /// <summary>
@@ -95,19 +101,21 @@ namespace LGame.LUtils
         /// <param name="duration">运动的时间</param>
         /// <param name="from">起始值</param>
         /// <param name="to">目标值</param>
-        public static void BeginRotation<T>(GameObject go, float duration, Vector3 from, Vector3 to)
+        public static void BeginRotation<T>(GameObject go, float duration, Vector3 from, Vector3 to) where T : CLTweenEvent
         {
             if (go == null) return;
 
-            CLTweenEvent tween = CreateTween(typeof(T));
+            CLTweenEvent tween = CreateTween<T>();
             if (tween == null) return;
 
-            TweenRotation rotation = TweenRotation.Begin(go, duration, Quaternion.identity);
-            rotation.from = from;
-            rotation.to = to;
-            rotation.method = UITweener.Method.EaseInOut;
-
-            tween.TweenerList.Add(rotation);
+            tween.TweenerList.Add(new TweenerEntity()
+            {
+                TweenType = TweenerType.Rotation,
+                Target = go,
+                fVector = from,
+                tVector = to,
+                Duration = duration
+            });
         }
 
         /// <summary>
@@ -117,19 +125,21 @@ namespace LGame.LUtils
         /// <param name="duration">运动的时间</param>
         /// <param name="from">起始值</param>
         /// <param name="to">目标值</param>
-        public static void BeginScale<T>(GameObject go, float duration, Vector3 from, Vector3 to)
+        public static void BeginScale<T>(GameObject go, float duration, Vector3 from, Vector3 to) where T : CLTweenEvent
         {
             if (go == null) return;
 
-            CLTweenEvent tween = CreateTween(typeof(T));
+            CLTweenEvent tween = CreateTween<T>();
             if (tween == null) return;
 
-            TweenScale scale = TweenScale.Begin(go, duration, to);
-            scale.from = from;
-            scale.to = to;
-            scale.method = UITweener.Method.EaseInOut;
-
-            tween.TweenerList.Add(scale);
+            tween.TweenerList.Add(new TweenerEntity()
+            {
+                TweenType = TweenerType.Scale,
+                Target = go,
+                fVector = from,
+                tVector = to,
+                Duration = duration
+            });
         }
 
         /// <summary>
@@ -139,25 +149,76 @@ namespace LGame.LUtils
         /// <param name="duration">运动的时间</param>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        public static void BeginColor<T>(GameObject go, float duration, Color from, Color to)
+        public static void BeginColor<T>(GameObject go, float duration, Color from, Color to) where T : CLTweenEvent
         {
             if (go == null) return;
 
-            CLTweenEvent tween = CreateTween(typeof(T));
+            CLTweenEvent tween = CreateTween<T>();
             if (tween == null) return;
 
-            TweenColor color = TweenColor.Begin(go, duration, to);
-            color.from = from;
-            color.to = to;
-            color.method = UITweener.Method.EaseInOut;
+            tween.TweenerList.Add(new TweenerEntity()
+            {
+                TweenType = TweenerType.Color,
+                Target = go,
+                fColor = from,
+                tColor = to,
+                Duration = duration
+            });
+        }
 
-            tween.TweenerList.Add(color);
+        public static UITweener BeginTweener(TweenerEntity entity)
+        {
+            if (entity == null) return null;
+
+            entity.Target.SetActive(true);
+            UITweener tween = null;
+
+            switch (entity.TweenType)
+            {
+                case TweenerType.Scale:
+                    TweenScale scale = TweenScale.Begin(entity.Target, entity.Duration, entity.tVector);
+                    scale.from = entity.fVector;
+                    scale.to = entity.tVector;
+                    scale.method = UITweener.Method.EaseInOut;
+                    tween = scale;
+                    break;
+                case TweenerType.Alpha:
+                    TweenAlpha alpha = TweenAlpha.Begin(entity.Target, entity.Duration, entity.to);
+                    alpha.from = entity.from;
+                    alpha.to = entity.to;
+                    alpha.method = UITweener.Method.EaseInOut;
+                    tween = alpha;
+                    break;
+                case TweenerType.Position:
+                    TweenPosition position = TweenPosition.Begin(entity.Target, entity.Duration, entity.tVector);
+                    position.from = entity.fVector;
+                    position.to = entity.tVector;
+                    position.method = UITweener.Method.EaseInOut;
+                    tween = position;
+                    break;
+                case TweenerType.Rotation:
+                    TweenRotation rotation = TweenRotation.Begin(entity.Target, entity.Duration, Quaternion.identity);
+                    rotation.from = entity.fVector;
+                    rotation.to = entity.tVector;
+                    rotation.method = UITweener.Method.EaseInOut;
+                    tween = rotation;
+                    break;
+                case TweenerType.Color:
+                    TweenColor color = TweenColor.Begin(entity.Target, entity.Duration, entity.fColor);
+                    color.from = entity.fColor;
+                    color.to = entity.tColor;
+                    color.method = UITweener.Method.EaseInOut;
+                    tween = color;
+                    break;
+            }
+
+            return tween;
         }
 
         /// <summary>
         /// 清理当前数据
         /// </summary>
-        protected void OnClear<T>()
+        protected void OnClear<T>() where T : CLTweenEvent
         {
             if (_tweenData != null) _tweenData.Remove(typeof(T));
 

@@ -108,9 +108,11 @@ namespace LGame.LUtils
                 return;
             }
 
-            UITweener tween = TweenerList[0];
-            if (tween == null) return;
-            mTweenTime = tween.duration;
+            TweenerEntity entity = TweenerList[0];
+            UITweener tween = BeginTweener(entity);
+            if (entity == null || tween == null) return;
+
+            mTweenTime = entity.Duration;
             tween.PlayForward();
             TweenerList.RemoveAt(0);
         }
@@ -123,7 +125,7 @@ namespace LGame.LUtils
             OnClear<CLSerialTween>();
             mTweenTime = 0;
         }
-        
+
     }
 
 }
