@@ -2,15 +2,6 @@
 using LGame.LCommon;
 using UnityEngine;
 
-
-/***
- * 
- * 
- * 系统内存分析
- * 
- * 
- */
-
 namespace LGame.LProfiler
 {
 
@@ -34,6 +25,7 @@ namespace LGame.LProfiler
         public static CLProfiler BeginProfiler()
         {
             GameObject create = SLToolsHelper.Create("_Profiler");
+            DontDestroyOnLoad(create);
             return BeginProfiler(create);
         }
 

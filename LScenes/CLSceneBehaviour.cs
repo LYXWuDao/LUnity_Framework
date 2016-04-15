@@ -42,7 +42,8 @@ namespace LGame.LScenes
         {
             get
             {
-                return SLScenesManage.CurrentScene.SceneName;
+                CLSceneBehaviour current = SLScenesManage.CurrentScene;
+                return current == null ? "" : current.SceneName;
             }
         }
 
@@ -77,7 +78,7 @@ namespace LGame.LScenes
 
         protected override void OnDestroy()
         {
-            base.OnDestroy();
+            OnClear();
             SLManageSource.RemoveSource(SceneName);
         }
 
