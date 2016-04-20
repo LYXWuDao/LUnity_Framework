@@ -322,20 +322,6 @@ namespace LGame.LUI
         }
 
         /// <summary>
-        /// 子类继承
-        /// </summary>
-        public virtual void OnAwake()
-        {
-        }
-
-        /// <summary>
-        /// 子类继承
-        /// </summary>
-        public virtual void OnStart()
-        {
-        }
-
-        /// <summary>
         /// 刷新面板
         /// </summary>
         public virtual void OnRefresh()
@@ -344,12 +330,26 @@ namespace LGame.LUI
         }
 
         /// <summary>
+        /// 子类继承
+        /// </summary>
+        protected virtual void OnAwake()
+        {
+        }
+
+        /// <summary>
+        /// 子类继承
+        /// </summary>
+        protected virtual void OnStart()
+        {
+        }
+        
+        /// <summary>
         /// 子类继承该函数
         ///     
         /// 点击函数
         /// </summary>
         /// <param name="btn">当前点击 Collider </param>
-        public virtual void OnCollider(GameObject btn)
+        protected virtual void OnCollider(GameObject btn)
         {
 
         }
@@ -360,7 +360,7 @@ namespace LGame.LUI
         /// 双击函数
         /// </summary>
         /// <param name="btn">当前双击 Collider</param>
-        public virtual void OnDoubleCollider(GameObject btn)
+        protected virtual void OnDoubleCollider(GameObject btn)
         {
 
         }
@@ -371,7 +371,7 @@ namespace LGame.LUI
         /// 按下时候的操作
         /// </summary>
         /// <param name="btn">按下时操作的 Collider</param>
-        public virtual void OnPressCollider(GameObject btn)
+        protected virtual void OnPressCollider(GameObject btn)
         {
 
         }
@@ -382,7 +382,7 @@ namespace LGame.LUI
         /// 抬起鼠标或者手指的操作
         /// </summary>
         /// <param name="btn">抬起的 Collider </param>
-        public virtual void OnReleaseCollider(GameObject btn)
+        protected virtual void OnReleaseCollider(GameObject btn)
         {
 
         }
@@ -393,7 +393,7 @@ namespace LGame.LUI
         /// 子类继承该函数
         /// </summary>
         /// <param name="btn">按下的 Collider</param>
-        public virtual void OnLoopPressCollider(GameObject btn)
+        protected virtual void OnLoopPressCollider(GameObject btn)
         {
 
         }

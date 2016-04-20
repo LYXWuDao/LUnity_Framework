@@ -40,7 +40,7 @@ namespace LGame.LCommon
         {
             get
             {
-                return _dicKey.Count;
+                return _dicKey == null ? 0 : _dicKey.Count;
             }
         }
 
@@ -51,7 +51,7 @@ namespace LGame.LCommon
         {
             get
             {
-                if (Length <= 0) return default(TValue);
+                if (Length <= 0 || _dicValue == null) return default(TValue);
                 return _dicValue[Length - 1];
             }
         }
@@ -212,7 +212,10 @@ namespace LGame.LCommon
         /// <returns></returns>
         public bool RemoveAll()
         {
+            if (_dicData == null) return true;
             _dicData.Clear();
+            _dicKey.Clear();
+            _dicValue.Clear();
             return true;
         }
     }

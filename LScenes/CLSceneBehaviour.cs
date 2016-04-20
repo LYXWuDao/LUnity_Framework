@@ -40,11 +40,8 @@ namespace LGame.LScenes
         /// </summary>
         public string SceneName
         {
-            get
-            {
-                CLSceneBehaviour current = SLScenesManage.CurrentScene;
-                return current == null ? "" : current.SceneName;
-            }
+            get;
+            set;
         }
 
         /// <summary>

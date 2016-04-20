@@ -80,6 +80,7 @@ namespace LGame.LScenes
 
             if (scene == null) scene = SLToolsHelper.FindComponet<CLSceneBehaviour>(root);
 
+            scene.SceneName = sceneName;
             scene.EnterScene();
             _sceneDataManage.Add(sceneName, scene);
 
